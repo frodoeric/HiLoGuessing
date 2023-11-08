@@ -10,15 +10,16 @@ namespace HiloGuessing.Domain.Entities
     public sealed class Score
     {
         public int Id { get; set; }
-        public int Points { get; private set; }
+        public int? Points { get; private set; }
 
-        public Score(int points, int id)
+        public Score(int? points, int id)
         {
+            ValidateDomain(points);
             Points = points;
             Id = id;
         }
 
-        private void ValidateDomain(string? points)
+        private void ValidateDomain(int? points)
         {
             DomainExceptionValidation.When(points == null, "Invalid points.Points is required");
         }

@@ -4,7 +4,7 @@ using HiloGuessing.Domain.Validation;
 
 namespace HiLoGuessing.Tests
 {
-    public class Tests
+    public class ScoreTests
     {
         [SetUp]
         public void Setup()
