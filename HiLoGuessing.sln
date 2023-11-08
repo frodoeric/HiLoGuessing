@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiLoGuessing.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiLoGuessing.IoC", "HiLoGuessing.IoC\HiLoGuessing.IoC.csproj", "{56612165-1FD0-4F31-8BF6-A42AA25BC012}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HiLoGuessing.Tests", "HiLoGuessing.Tests\HiLoGuessing.Tests.csproj", "{81442CFA-2FF4-433F-A0A8-FA0DDF6CB98C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{56612165-1FD0-4F31-8BF6-A42AA25BC012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56612165-1FD0-4F31-8BF6-A42AA25BC012}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56612165-1FD0-4F31-8BF6-A42AA25BC012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81442CFA-2FF4-433F-A0A8-FA0DDF6CB98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81442CFA-2FF4-433F-A0A8-FA0DDF6CB98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81442CFA-2FF4-433F-A0A8-FA0DDF6CB98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81442CFA-2FF4-433F-A0A8-FA0DDF6CB98C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
