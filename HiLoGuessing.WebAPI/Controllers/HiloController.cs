@@ -15,24 +15,26 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
 
         [HttpGet(Name = "Generate Mystery Number")]
-        public int GetNumber([FromQuery] int max = 10, [FromQuery] int min = 1)
+        public IActionResult GetNumber([FromQuery] int max = 10, [FromQuery] int min = 1)
         {
             _mysteryNumber = new MysteryNumberGenerator();
             _mysteryNumber.GenerateNumber(max, min);
             var mysteryNumber = MysteryNumberRepository.GetMysteryNumber();
-            return mysteryNumber;
+            return Ok(mysteryNumber);
         }
 
         [HttpPost(Name = "Proposes a number")]
-        public int SendNumber([FromQuery] int number)
+        public IActionResult SendNumber([FromQuery] int number)
         {
             _compareNumber = new CompareMysteryNumber();
             var mysteryNumber = MysteryNumberRepository.GetMysteryNumber();
-            return _compareNumber.CompareNumber(mysteryNumber, number);
+            var response = _compareNumber.CompareNumber(mysteryNumber, number);
+
+            return Ok(response);
         }
     }
 
-    public class MysteryNumberGenerator
+    public sealed class MysteryNumberGenerator
     {
         public void GenerateNumber(int max, int min)
         {
@@ -41,28 +43,37 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
     }
 
-    public class CompareMysteryNumber
+    public sealed class CompareMysteryNumber
     {
-        public int CompareNumber(int mysteryNumber, int numberGuess)
+        public GuessResponse CompareNumber(int mysteryNumber, int numberGuess)
         {
+            var response = new GuessResponse();
+
             if (mysteryNumber == numberGuess)
             {
-                return 0;
+                response.GuessResult = GuessResult.Equal;
+                response.Message = "Mystery Number Discovered!";
+                return response;
             }
 
             if (mysteryNumber > numberGuess)
             {
-                return 1;
+                response.GuessResult = GuessResult.Greater;
+                response.Message = "Mystery Number is Greater than the Player's guess!";
+                return response;
             }
 
-            return -1;
+            response.GuessResult = GuessResult.Smaller;
+            response.Message = "Mystery Number is Smaller than the Player's guess!";
+
+            return response;
         }
     }
 
     public enum GuessResult
     {
         Greater = 1,
-        Less = -1,
+        Smaller = -1,
         Equal = 0
     }
 
@@ -79,5 +90,11 @@ namespace HiLoGuessing.WebAPI.Controllers
         {
             _mysteryNumber = mysteryNumber;
         }
+    }
+
+    public sealed class GuessResponse
+    {
+        public GuessResult GuessResult { get; set; }
+        public string Message { get; set; }
     }
 }
