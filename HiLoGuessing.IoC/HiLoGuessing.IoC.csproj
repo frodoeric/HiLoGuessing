@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HiLoGuessing.Application\HiLoGuessing.Application.csproj" />
+    <ProjectReference Include="..\HiLoGuessing.Data\HiLoGuessing.Infrastructure.csproj" />
     <ProjectReference Include="..\HiloGuessing.Domain\HiloGuessing.Domain.csproj" />
   </ItemGroup>
 
