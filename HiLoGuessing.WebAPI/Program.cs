@@ -1,6 +1,6 @@
 using HiLoGuessing.Application.Services.Interfaces;
 using HiLoGuessing.Application.Services;
-using HiLoGuessing.Infrastructure;
+using HiLoGuessing.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IMysteryNumberService, MysteryNumberService>();
 builder.Services.AddSingleton<IAttemptsService, AttemptsService>();
 builder.Services.AddSingleton<IComparisonService, ComparisonService>();
+
+builder.Services.AddInfrastructure();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

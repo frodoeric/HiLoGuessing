@@ -1,5 +1,4 @@
 ﻿using HiLoGuessing.Application.Services.Interfaces;
-using HiLoGuessing.Infrastructure;
 
 namespace HiLoGuessing.Application.Services
 {
@@ -8,22 +7,23 @@ namespace HiLoGuessing.Application.Services
         //todo: separate infra repository with interface
         public List<int> GetAttempts()
         {
-            return MysteryNumberRepository.AttemptsList;
+            //return MysteryNumberRepository.AttemptsList;
+            return null;
         }
 
         public void IncrementAttempts()
         {
-            MysteryNumberRepository.NumberOfAttempts++;
+            //MysteryNumberRepository.NumberOfAttempts++;
         }
 
         public void ResetAttempts()
         {
-            MysteryNumberRepository.NumberOfAttempts = 0;
+            //MysteryNumberRepository.NumberOfAttempts = 0;
         }
 
         public void SaveAttempts()
         {
-            MysteryNumberRepository.AttemptsList.Add(MysteryNumberRepository.NumberOfAttempts);
+            //MysteryNumberRepository.AttemptsList.Add(MysteryNumberRepository.NumberOfAttempts);
         }
     }
 }
