@@ -11,7 +11,8 @@ namespace HiLoGuessing.Infrastructure.Context
     {
         public DbSet<MysteryNumber?> MysteryNumbers { get; set; }
 
-        public MysteryNumberDbContext()
+        public MysteryNumberDbContext(DbContextOptions<MysteryNumberDbContext> options)
+        : base(options)
         {
             
         }

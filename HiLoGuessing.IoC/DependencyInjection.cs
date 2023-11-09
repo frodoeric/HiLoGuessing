@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using HiloGuessing.Domain.Interfaces;
 using HiLoGuessing.Infrastructure.Context;
+using HiLoGuessing.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HiLoGuessing.IoC
@@ -23,7 +23,7 @@ namespace HiLoGuessing.IoC
                 opt.UseSqlite($"Data Source={DbPath}",
                     b => b.MigrationsAssembly(typeof(MysteryNumberDbContext).Assembly.FullName)));
 
-            services.AddScoped<IMysteryNumberRepository, IMysteryNumberRepository>();
+            services.AddScoped<IMysteryNumberRepository, MysteryNumberRepository>();
 
             return services;
         }
