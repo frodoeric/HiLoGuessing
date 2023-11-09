@@ -7,28 +7,34 @@ namespace HiLoGuessing.WebAPI.Controllers
     [ApiController]
     public class HiloController : ControllerBase
     {
-        private MysteryNumberGenerator _mysteryNumber;
-        private CompareMysteryNumber _compareNumber;
 
-        public HiloController()
-        {            
-        }
-
-        [HttpGet(Name = "Generate Mystery Number")]
+        [HttpGet("MysteryNumber")]
         public IActionResult GetNumber([FromQuery] int max = 10, [FromQuery] int min = 1)
         {
-            _mysteryNumber = new MysteryNumberGenerator();
-            _mysteryNumber.GenerateNumber(max, min);
-            var mysteryNumber = MysteryNumberRepository.GetMysteryNumber();
-            return Ok(mysteryNumber);
+            new MysteryNumberGenerator().GenerateNumber(max, min);
+            var result = MysteryNumberRepository.MysteryNumber;
+            return Ok(result);
         }
 
-        [HttpPost(Name = "Proposes a number")]
+        [HttpGet("Attempts")]
+        public IActionResult GetAttempts()
+        {
+            var result = MysteryNumberRepository.AttemptsList;
+            return Ok(result);
+        }
+
+        [HttpPost("MysteryNumber")]
         public IActionResult SendNumber([FromQuery] int number)
         {
-            _compareNumber = new CompareMysteryNumber();
-            var mysteryNumber = MysteryNumberRepository.GetMysteryNumber();
-            var response = _compareNumber.CompareNumber(mysteryNumber, number);
+            var mysteryNumber = MysteryNumberRepository.MysteryNumber;
+            var response = new CompareMysteryNumber().CompareNumber(mysteryNumber, number);
+
+            if (response.GuessResult == GuessResult.NotGenerated)
+            {
+                return BadRequest(response);
+            }
+
+            new AttemptsService().AttemptsSum();
 
             return Ok(response);
         }
@@ -39,7 +45,12 @@ namespace HiLoGuessing.WebAPI.Controllers
         public void GenerateNumber(int max, int min)
         {
             var random = new Random();
-            MysteryNumberRepository.SetMysteryNumber(random.Next(min, max));
+            MysteryNumberRepository.MysteryNumber = (random.Next(min, max));
+        }
+
+        public void ResetMysteryNumber()
+        {
+            MysteryNumberRepository.MysteryNumber = 0;
         }
     }
 
@@ -49,10 +60,24 @@ namespace HiLoGuessing.WebAPI.Controllers
         {
             var response = new GuessResponse();
 
+            if (mysteryNumber == 0)
+            {
+                response.GuessResult = GuessResult.NotGenerated;
+                response.Message = "Please Generate a new Mystery Number";
+                return response;
+            }
+
             if (mysteryNumber == numberGuess)
             {
+                var attempts = new AttemptsService();
+                new MysteryNumberGenerator().ResetMysteryNumber();
+
                 response.GuessResult = GuessResult.Equal;
                 response.Message = "Mystery Number Discovered!";
+
+                attempts.SaveAttempts();
+                attempts.ResetAttempts();
+
                 return response;
             }
 
@@ -70,26 +95,37 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
     }
 
+    public sealed class AttemptsService
+    {
+        public void AttemptsSum()
+        {
+            MysteryNumberRepository.NumberOfAttempts++;
+        }
+
+        public void ResetAttempts()
+        {
+            MysteryNumberRepository.NumberOfAttempts = 0;
+        }
+
+        public void SaveAttempts()
+        {
+            MysteryNumberRepository.AttemptsList.Add(MysteryNumberRepository.NumberOfAttempts);
+        }
+    }
+
     public enum GuessResult
     {
-        Greater = 1,
-        Smaller = -1,
-        Equal = 0
+        NotGenerated = 0,
+        Equal = 1,
+        Smaller = 2,
+        Greater = 3,
     }
 
     public static class MysteryNumberRepository
     {
-        private static int _mysteryNumber;
-
-        public static int GetMysteryNumber()
-        {
-            return _mysteryNumber;
-        }
-
-        public static void SetMysteryNumber(int mysteryNumber)
-        {
-            _mysteryNumber = mysteryNumber;
-        }
+        public static int MysteryNumber { get; set; }
+        public static int NumberOfAttempts { get; set; }
+        public static List<int> AttemptsList { get; set; } = new();
     }
 
     public sealed class GuessResponse
