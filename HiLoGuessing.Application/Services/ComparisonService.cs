@@ -31,6 +31,7 @@ namespace HiLoGuessing.Application.Services
                 response.GuessResult = GuessResult.Equal;
                 response.Message = "Mystery Number Discovered!";
 
+                //todo: implement MediatoR, send notification
                 attempts.SaveAttempts();
                 attempts.ResetAttempts();
 

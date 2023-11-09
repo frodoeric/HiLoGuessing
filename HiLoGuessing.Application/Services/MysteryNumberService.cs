@@ -12,9 +12,9 @@ namespace HiLoGuessing.Application.Services
     {
         public int GenerateNumber(int max, int min)
         {
-            var random = new Random();
-            MysteryNumberRepository.MysteryNumber = random.Next(min, max);
-            return MysteryNumberRepository.MysteryNumber;
+            var next = new Random().Next(min, max);
+            MysteryNumberRepository.MysteryNumber = next;
+            return next;
         }
 
         public int GetMysteryNumber()
@@ -24,7 +24,7 @@ namespace HiLoGuessing.Application.Services
 
         public void ResetMysteryNumber()
         {
-            MysteryNumberRepository.MysteryNumber = 0;
+            MysteryNumberRepository.MysteryNumber = 1;
         }
     }
 }

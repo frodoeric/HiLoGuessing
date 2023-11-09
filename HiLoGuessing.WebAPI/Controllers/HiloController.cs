@@ -1,6 +1,5 @@
-﻿using HiLoGuessing.Application.Services.Interfaces;
-using HiloGuessing.Domain.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using HiloGuessing.Domain.Entities;
+using HiLoGuessing.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HiLoGuessing.WebAPI.Controllers
@@ -26,7 +25,7 @@ namespace HiLoGuessing.WebAPI.Controllers
         [HttpGet("MysteryNumber")]
         public ActionResult<int> GetNumber([FromQuery] int max = 10, [FromQuery] int min = 1)
         {
-            int mysteryNumber = _mysteryNumberService.GenerateNumber(max, min);
+            var mysteryNumber = _mysteryNumberService.GenerateNumber(max, min);
             return Ok(mysteryNumber);
         }
 

@@ -1,10 +1,5 @@
 ﻿using HiLoGuessing.Application.Services.Interfaces;
 using HiLoGuessing.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HiLoGuessing.Application.Services
 {
