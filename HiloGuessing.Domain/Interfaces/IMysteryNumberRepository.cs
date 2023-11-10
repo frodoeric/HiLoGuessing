@@ -10,8 +10,8 @@ namespace HiloGuessing.Domain.Interfaces
 {
     public interface IMysteryNumberRepository
     {
-        Task<MysteryNumber> CreateAsync(MysteryNumber mysteryNumber);
-        Task<MysteryNumber?> GetByIdAsync(Guid id);
-        Task<MysteryNumber> UpdateByIdAsync(MysteryNumber mysteryNumber);
+        //Task<MysteryNumber> CreateAsync(MysteryNumber mysteryNumber);
+        //Task<MysteryNumber?> GetByIdAsync(Guid id);
+        //Task<MysteryNumber> UpdateByIdAsync(MysteryNumber mysteryNumber);
     }
 }

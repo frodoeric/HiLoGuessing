@@ -15,14 +15,6 @@ namespace HiLoGuessing.IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            var DbPath = System.IO.Path.Join(path, "hilo.db");
-
-            services.AddDbContext<MysteryNumberDbContext>(opt =>
-                opt.UseSqlite($"Data Source={DbPath}",
-                    b => b.MigrationsAssembly(typeof(MysteryNumberDbContext).Assembly.FullName)));
-
             services.AddScoped<IMysteryNumberRepository, MysteryNumberRepository>();
 
             return services;
