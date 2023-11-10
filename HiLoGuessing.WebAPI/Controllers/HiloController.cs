@@ -22,10 +22,19 @@ namespace HiLoGuessing.WebAPI.Controllers
             _comparisonService = comparisonService;
         }
 
-        [HttpGet("MysteryNumber")]
-        public async Task<ActionResult<int>> GetNumberAsync([FromQuery] int max = 10, [FromQuery] int min = 1)
+        [HttpGet("HiLoGuess/Start")]
+        public async Task<ActionResult<int>> Start()
         {
-            var mysteryNumber = await _mysteryNumberService.GenerateNumber(max, min);
+            var mysteryNumber = await _mysteryNumberService.CreateHiLoGuessAsync();
+            return Ok(mysteryNumber);
+        }
+
+        [HttpPost("HiLoGuess/GetNumber")]
+        public async Task<ActionResult<int>> GetNumberAsync(
+            [FromBody] int max = 10, 
+            [FromQuery] int min = 1)
+        {
+            var mysteryNumber = await _mysteryNumberService.CreateMysteryNumberAsync(max, min);
             return Ok(mysteryNumber);
         }
 
@@ -36,7 +45,7 @@ namespace HiLoGuessing.WebAPI.Controllers
             return Ok(attempts);
         }
 
-        [HttpPost("MysteryNumber")]
+        [HttpPost("HiLoGuess")]
         public async Task<ActionResult<GuessResponse>> SendNumber([FromQuery] int number)
         {
             var mysteryNumber = await _mysteryNumberService.GetMysteryNumber();

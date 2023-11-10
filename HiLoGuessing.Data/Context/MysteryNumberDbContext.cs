@@ -9,7 +9,7 @@ namespace HiLoGuessing.Infrastructure.Context
 {
     public class MysteryNumberDbContext : DbContext
     {
-        public DbSet<MysteryNumber> MysteryNumbers { get; set; }
+        public DbSet<HiLoGuess> HiLoGuess { get; set; }
         public DbSet<Attempt> Attempts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -24,7 +24,7 @@ namespace HiLoGuessing.IoC
 
             services.AddDbContext<MysteryNumberDbContext>();
 
-            services.AddScoped<IRepository<MysteryNumber>, MysteryNumberRepository>();
+            services.AddScoped<IRepository<HiLoGuess>, MysteryNumberRepository>();
             services.AddScoped<IRepository<Attempt>, AttemptRepository>();
 
             return services;

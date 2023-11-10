@@ -11,7 +11,7 @@ namespace HiLoGuessing.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "MysteryNumbers",
+                name: "HiLoGuess",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -39,7 +39,7 @@ namespace HiLoGuessing.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Attempts_MysteryNumbers_MysteryNumberId",
                         column: x => x.MysteryNumberId,
-                        principalTable: "MysteryNumbers",
+                        principalTable: "HiLoGuess",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -57,7 +57,7 @@ namespace HiLoGuessing.Infrastructure.Migrations
                 name: "Attempts");
 
             migrationBuilder.DropTable(
-                name: "MysteryNumbers");
+                name: "HiLoGuess");
         }
     }
 }

@@ -35,7 +35,7 @@ namespace HiLoGuessing.Infrastructure.Migrations
                     b.ToTable("Attempts");
                 });
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.MysteryNumber", b =>
+            modelBuilder.Entity("HiLoGuessing.Infrastructure.HiLoGuess", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,21 +50,21 @@ namespace HiLoGuessing.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MysteryNumbers");
+                    b.ToTable("HiLoGuess");
                 });
 
             modelBuilder.Entity("HiLoGuessing.Infrastructure.Attempt", b =>
                 {
-                    b.HasOne("HiLoGuessing.Infrastructure.MysteryNumber", "MysteryNumber")
+                    b.HasOne("HiLoGuessing.Infrastructure.HiLoGuess", "HiLoGuess")
                         .WithMany("Attempts")
                         .HasForeignKey("MysteryNumberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MysteryNumber");
+                    b.Navigation("HiLoGuess");
                 });
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.MysteryNumber", b =>
+            modelBuilder.Entity("HiLoGuessing.Infrastructure.HiLoGuess", b =>
                 {
                     b.Navigation("Attempts");
                 });

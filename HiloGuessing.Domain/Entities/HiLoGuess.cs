@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace HiLoGuessing.Infrastructure
 {
-    public class MysteryNumber
+    public class HiLoGuess
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int GeneratedMysteryNumber { get; set; }
         public int NumberOfAttempts { get; set; } = 1;
 
@@ -20,11 +20,11 @@ namespace HiLoGuessing.Infrastructure
     public class Attempt
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int AttemptedNumber { get; set; }
 
         public int MysteryNumberId { get; set; }
-        public MysteryNumber MysteryNumber { get; set; }
+        public HiLoGuess HiLoGuess { get; set; }
     }
 
 }

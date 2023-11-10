@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HiLoGuessing.Infrastructure.Repositories
 {
-    public class MysteryNumberRepository : IRepository<MysteryNumber>
+    public class MysteryNumberRepository : IRepository<HiLoGuess>
     {
         private readonly MysteryNumberDbContext _dbContext;
 
@@ -18,31 +18,32 @@ namespace HiLoGuessing.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<MysteryNumber> GetByIdAsync(int id)
+        public async Task<HiLoGuess> GetByIdAsync(Guid id)
         {
-            return await _dbContext.MysteryNumbers.FindAsync(id);
+            return await _dbContext.HiLoGuess.FindAsync(id);
         }
 
-        public async Task<List<MysteryNumber>> GetAllAsync()
+        public async Task<List<HiLoGuess>> GetAllAsync()
         {
-            return await _dbContext.MysteryNumbers.ToListAsync();
+            return await _dbContext.HiLoGuess.ToListAsync();
         }
 
-        public async Task AddAsync(MysteryNumber entity)
+        public async Task<Guid> AddAsync(HiLoGuess entity)
         {
-            await _dbContext.MysteryNumbers.AddAsync(entity);
+            var result = await _dbContext.HiLoGuess.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return result.Entity.Id;
+        }
+
+        public async Task UpdateAsync(HiLoGuess entity)
+        {
+            _dbContext.HiLoGuess.Update(entity);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(MysteryNumber entity)
+        public async Task DeleteAsync(HiLoGuess entity)
         {
-            _dbContext.MysteryNumbers.Update(entity);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(MysteryNumber entity)
-        {
-            _dbContext.MysteryNumbers.Remove(entity);
+            _dbContext.HiLoGuess.Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
     }

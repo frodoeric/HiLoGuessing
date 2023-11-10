@@ -27,7 +27,7 @@ namespace HiLoGuessing.Application.Services
 
             if (mysteryNumber == numberGuess)
             {
-                _mysteryNumberService.ResetMysteryNumber();
+                _mysteryNumberService.ResetMysteryNumberAsync();
 
                 response.GuessResult = GuessResult.Equal;
                 response.Message = "Mystery Number Discovered!";

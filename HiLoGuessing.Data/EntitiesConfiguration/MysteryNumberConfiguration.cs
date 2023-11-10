@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HiLoGuessing.Infrastructure.EntitiesConfiguration
 {
-    public class MysteryNumberConfiguration : IEntityTypeConfiguration<MysteryNumber>
+    public class MysteryNumberConfiguration : IEntityTypeConfiguration<HiLoGuess>
     {
-        public void Configure(EntityTypeBuilder<MysteryNumber> builder)
+        public void Configure(EntityTypeBuilder<HiLoGuess> builder)
         {
             builder.HasKey(t => t.Id);
             builder.Property(p => p.GeneratedMysteryNumber).HasMaxLength(100);

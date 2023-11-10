@@ -14,7 +14,7 @@ namespace HiLoGuessing.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Attempt> GetByIdAsync(int id)
+        public async Task<Attempt> GetByIdAsync(Guid id)
         {
             return await _dbContext.Attempts.FindAsync(id);
         }
@@ -24,10 +24,11 @@ namespace HiLoGuessing.Infrastructure.Repositories
             return await _dbContext.Attempts.ToListAsync();
         }
 
-        public async Task AddAsync(Attempt entity)
+        public async Task<Guid> AddAsync(Attempt entity)
         {
-            await _dbContext.Attempts.AddAsync(entity);
+            var result = await _dbContext.Attempts.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+            return result.Entity.Id;
         }
 
         public async Task UpdateAsync(Attempt entity)

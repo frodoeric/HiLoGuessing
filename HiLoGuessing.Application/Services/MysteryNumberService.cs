@@ -6,36 +6,39 @@ namespace HiLoGuessing.Application.Services
 {
     public class MysteryNumberService : IMysteryNumberService
     {
-        private readonly IRepository<MysteryNumber> _mysteryNumbeRepository;
-        public MysteryNumber MysteryNumber { get; set; }
+        private readonly IRepository<HiLoGuess> _hiloRepository;
 
-        public MysteryNumberService(IRepository<MysteryNumber> mysteryNumbeRepository)
+        public MysteryNumberService(IRepository<HiLoGuess> hiloRepository)
         {
-            _mysteryNumbeRepository = mysteryNumbeRepository;
-            MysteryNumber = new MysteryNumber();
+            _hiloRepository = hiloRepository;
         }
 
-        public async Task<int> GenerateNumber(int max, int min)
+        public async Task<Guid> CreateHiLoGuessAsync()
         {
-            //todo create entity
-            var next = new Random().Next(min, max);
-            MysteryNumber.GeneratedMysteryNumber = next;
+            var hilo = new HiLoGuess();
+            return await _hiloRepository.AddAsync(hilo);
+        }
 
-            await _mysteryNumbeRepository.AddAsync(MysteryNumber);
-            //MysteryNumberRepository.MysteryNumber = next;
+        public async Task<int> CreateMysteryNumberAsync(Guid id, int max, int min)
+        {
+            var hilo = await _hiloRepository.GetByIdAsync(id);
+            var next = new Random().Next(min, max);
+            hilo.GeneratedMysteryNumber = next;
+
+            await _hiloRepository.UpdateAsync(hilo);
             return next;
         }
 
-        public async Task<int> GetMysteryNumber()
+        public async Task<int> GetMysteryNumberAsync(Guid id)
         {
-            //_mysteryNumbeRepository.GetByIdAsync()
-            var result = await _mysteryNumbeRepository.GetAllAsync();
-            return 0;
+            var mysteryNumber = await _hiloRepository.GetByIdAsync(id);
+            return mysteryNumber?.GeneratedMysteryNumber ?? 0;
         }
 
-        public void ResetMysteryNumber()
+        public async Task<Guid> ResetHiLoGuessAsync()
         {
-            //MysteryNumberRepository.MysteryNumber = 0;
+            var hilo = new HiLoGuess();
+            return await _hiloRepository.AddAsync(hilo);
         }
     }
 }
