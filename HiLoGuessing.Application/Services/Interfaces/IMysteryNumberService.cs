@@ -8,8 +8,8 @@ namespace HiLoGuessing.Application.Services.Interfaces
 {
     public interface IMysteryNumberService
     {
-        int GenerateNumber(int max, int min);
-        int GetMysteryNumber();
+        Task<int> GenerateNumber(int max, int min);
+        Task<int> GetMysteryNumber();
         void ResetMysteryNumber();
     }
 }

@@ -8,24 +8,28 @@ namespace HiLoGuessing.Application.Services
     {
         private readonly IRepository<MysteryNumber> _mysteryNumbeRepository;
         public MysteryNumber MysteryNumber { get; set; }
-        public MysteryNumberService()
+
+        public MysteryNumberService(IRepository<MysteryNumber> mysteryNumbeRepository)
         {
+            _mysteryNumbeRepository = mysteryNumbeRepository;
             MysteryNumber = new MysteryNumber();
         }
-        public int GenerateNumber(int max, int min)
+
+        public async Task<int> GenerateNumber(int max, int min)
         {
             //todo create entity
             var next = new Random().Next(min, max);
             MysteryNumber.GeneratedMysteryNumber = next;
 
-            _mysteryNumbeRepository.AddAsync(MysteryNumber);
+            await _mysteryNumbeRepository.AddAsync(MysteryNumber);
             //MysteryNumberRepository.MysteryNumber = next;
             return next;
         }
 
-        public int GetMysteryNumber()
+        public async Task<int> GetMysteryNumber()
         {
             //_mysteryNumbeRepository.GetByIdAsync()
+            var result = await _mysteryNumbeRepository.GetAllAsync();
             return 0;
         }
 

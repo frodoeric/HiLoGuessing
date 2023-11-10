@@ -10,8 +10,8 @@ namespace HiLoGuessing.Application.Services.Interfaces
     public interface IAttemptsService
     {
         Task<List<Attempt>> GetAttempts();
-        void IncrementAttempts();
-        void SaveAttempts();
-        void ResetAttempts();
+        Task IncrementAttempts();
+        Task SaveAttempts();
+        Task ResetAttempts();
     }
 }

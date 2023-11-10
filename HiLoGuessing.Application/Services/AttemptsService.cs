@@ -8,6 +8,7 @@ namespace HiLoGuessing.Application.Services
     {
         private readonly IRepository<Attempt> _attemptRepository;
 
+
         public AttemptsService(IRepository<Attempt> attemptRepository)
         {
             _attemptRepository = attemptRepository;
@@ -15,21 +16,26 @@ namespace HiLoGuessing.Application.Services
 
         public async Task<List<Attempt>> GetAttempts()
         {
-            //todo get by id
             return await _attemptRepository.GetAllAsync();
         }
 
-        public void IncrementAttempts()
+        public async Task IncrementAttempts()
         {
-            //MysteryNumberRepository.NumberOfAttempts++;
+            var latestAttempt = await _attemptRepository.GetAllAsync();
+            var result = latestAttempt.LastOrDefault();
+            if (result != null)
+            {
+                result.AttemptedNumber++;
+                await _attemptRepository.UpdateAsync(result);
+            }
         }
 
-        public void ResetAttempts()
+        public async Task ResetAttempts()
         {
             //MysteryNumberRepository.NumberOfAttempts = 0;
         }
 
-        public void SaveAttempts()
+        public async Task SaveAttempts()
         {
             //MysteryNumberRepository.AttemptsList.Add(MysteryNumberRepository.NumberOfAttempts);
         }

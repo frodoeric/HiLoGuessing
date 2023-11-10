@@ -9,6 +9,7 @@ using HiLoGuessing.Infrastructure.Context;
 using HiLoGuessing.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace HiLoGuessing.IoC
 {
@@ -16,6 +17,13 @@ namespace HiLoGuessing.IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
+            //Todo: create param configuration
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            var DbPath = System.IO.Path.Join(path, "hilo.db");
+
+            services.AddDbContext<MysteryNumberDbContext>();
+
             services.AddScoped<IRepository<MysteryNumber>, MysteryNumberRepository>();
             services.AddScoped<IRepository<Attempt>, AttemptRepository>();
 
