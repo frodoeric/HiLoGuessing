@@ -5,35 +5,45 @@ using System.Text;
 using System.Threading.Tasks;
 using HiloGuessing.Domain.Interfaces;
 using HiLoGuessing.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace HiLoGuessing.Infrastructure.Repositories
 {
-    public class MysteryNumberRepository : IMysteryNumberRepository
+    public class MysteryNumberRepository : IRepository<MysteryNumber>
     {
-        private readonly MysteryNumberDbContext _context;
+        private readonly MysteryNumberDbContext _dbContext;
 
-        public MysteryNumberRepository(MysteryNumberDbContext context)
+        public MysteryNumberRepository(MysteryNumberDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
-        public async Task<MysteryNumber> CreateAsync(MysteryNumber mysteryNumber)
+        public async Task<MysteryNumber> GetByIdAsync(int id)
         {
-            _context.Add(mysteryNumber);
-            await _context.SaveChangesAsync();
-            return mysteryNumber;
+            return await _dbContext.MysteryNumbers.FindAsync(id);
         }
 
-        public async Task<MysteryNumber?> GetByIdAsync(Guid id)
+        public async Task<List<MysteryNumber>> GetAllAsync()
         {
-            return await _context.MysteryNumbers.FindAsync(id);
+            return await _dbContext.MysteryNumbers.ToListAsync();
         }
 
-        public async Task<MysteryNumber> UpdateByIdAsync(MysteryNumber mysteryNumber)
+        public async Task AddAsync(MysteryNumber entity)
         {
-            _context.Update(mysteryNumber);
-            await _context.SaveChangesAsync();
-            return mysteryNumber;
+            await _dbContext.MysteryNumbers.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(MysteryNumber entity)
+        {
+            _dbContext.MysteryNumbers.Update(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(MysteryNumber entity)
+        {
+            _dbContext.MysteryNumbers.Remove(entity);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

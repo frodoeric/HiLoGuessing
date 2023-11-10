@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HiloGuessing.Domain.Interfaces;
+using HiLoGuessing.Infrastructure;
 using HiLoGuessing.Infrastructure.Context;
 using HiLoGuessing.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,8 @@ namespace HiLoGuessing.IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddScoped<IMysteryNumberRepository, MysteryNumberRepository>();
+            services.AddScoped<IRepository<MysteryNumber>, MysteryNumberRepository>();
+            services.AddScoped<IRepository<Attempt>, AttemptRepository>();
 
             return services;
         }

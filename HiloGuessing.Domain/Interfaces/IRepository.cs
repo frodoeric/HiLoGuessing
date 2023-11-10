@@ -8,10 +8,13 @@ using HiLoGuessing.Infrastructure;
 
 namespace HiloGuessing.Domain.Interfaces
 {
-    public interface IMysteryNumberRepository
+    public interface IRepository<T> where T : class
     {
-        //Task<MysteryNumber> CreateAsync(MysteryNumber mysteryNumber);
-        //Task<MysteryNumber?> GetByIdAsync(Guid id);
-        //Task<MysteryNumber> UpdateByIdAsync(MysteryNumber mysteryNumber);
+        Task<T> GetByIdAsync(int id);
+        Task<List<T>> GetAllAsync();
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
     }
+
 }

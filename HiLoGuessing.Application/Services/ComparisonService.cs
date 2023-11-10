@@ -6,10 +6,12 @@ namespace HiLoGuessing.Application.Services
     public class ComparisonService : IComparisonService
     {
         private IMysteryNumberService _mysteryNumberService;
+        private IAttemptsService _attemptsService;
 
-        public ComparisonService(IMysteryNumberService mysteryNumberService)
+        public ComparisonService(IMysteryNumberService mysteryNumberService, IAttemptsService attemptsService)
         {
             _mysteryNumberService = mysteryNumberService;
+            _attemptsService = attemptsService;
         }
 
         public GuessResponse CompareNumber(int mysteryNumber, int numberGuess)
@@ -25,15 +27,14 @@ namespace HiLoGuessing.Application.Services
 
             if (mysteryNumber == numberGuess)
             {
-                var attempts = new AttemptsService();
                 _mysteryNumberService.ResetMysteryNumber();
 
                 response.GuessResult = GuessResult.Equal;
                 response.Message = "Mystery Number Discovered!";
 
                 //todo: implement MediatoR, send notification
-                attempts.SaveAttempts();
-                attempts.ResetAttempts();
+                _attemptsService.SaveAttempts();
+                _attemptsService.ResetAttempts();
 
                 return response;
             }

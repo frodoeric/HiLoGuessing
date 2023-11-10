@@ -1,14 +1,22 @@
-﻿using HiLoGuessing.Application.Services.Interfaces;
+﻿using HiloGuessing.Domain.Interfaces;
+using HiLoGuessing.Application.Services.Interfaces;
+using HiLoGuessing.Infrastructure;
 
 namespace HiLoGuessing.Application.Services
 {
     public class AttemptsService : IAttemptsService
     {
-        //todo: separate infra repository with interface
-        public List<int> GetAttempts()
+        private readonly IRepository<Attempt> _attemptRepository;
+
+        public AttemptsService(IRepository<Attempt> attemptRepository)
         {
-            //return MysteryNumberRepository.AttemptsList;
-            return null;
+            _attemptRepository = attemptRepository;
+        }
+
+        public async Task<List<Attempt>> GetAttempts()
+        {
+            //todo get by id
+            return await _attemptRepository.GetAllAsync();
         }
 
         public void IncrementAttempts()
