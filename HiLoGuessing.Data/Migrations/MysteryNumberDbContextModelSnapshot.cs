@@ -22,7 +22,7 @@ namespace HiLoGuessing.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AttemptedNumber")
+                    b.Property<int>("NumberOfAttempts")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MysteryNumberId")

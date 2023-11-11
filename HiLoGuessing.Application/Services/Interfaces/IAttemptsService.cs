@@ -11,7 +11,5 @@ namespace HiLoGuessing.Application.Services.Interfaces
     {
         Task<List<Attempt>> GetAttempts();
         Task IncrementAttempts(Guid id);
-        Task SaveAttempts();
-        Task ResetAttempts();
     }
 }

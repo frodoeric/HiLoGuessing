@@ -40,5 +40,11 @@ namespace HiLoGuessing.Application.Services
             var hilo = new HiLoGuess();
             return await _hiloRepository.AddAsync(hilo);
         }
+
+        //public async Task SaveAttempts(Guid id, int numberOfAttempts)
+        //{
+        //    var hilo = await _hiloRepository.GetByIdAsync(id);
+        //    hilo.Attempts.Add(numberOfAttempts);
+        //}
     }
 }

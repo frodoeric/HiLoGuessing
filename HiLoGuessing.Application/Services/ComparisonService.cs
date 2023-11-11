@@ -34,8 +34,8 @@ namespace HiLoGuessing.Application.Services
                 response.Message = "Mystery Number Discovered!";
                 response.Data = hiloGuess;
                 
-                await _attemptsService.SaveAttempts();
-                await _attemptsService.ResetAttempts();
+                //await _attemptsService.SaveAttempts();
+                //await _attemptsService.ResetAttempts();
 
                 return response;
             }

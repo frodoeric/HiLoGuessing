@@ -21,7 +21,7 @@ namespace HiLoGuessing.Infrastructure
     {
         [Key]
         public Guid Id { get; set; }
-        public int AttemptedNumber { get; set; }
+        public int NumberOfAttempts { get; set; }
 
         public int MysteryNumberId { get; set; }
         public HiLoGuess HiLoGuess { get; set; }

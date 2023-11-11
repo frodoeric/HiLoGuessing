@@ -22,18 +22,8 @@ namespace HiLoGuessing.Application.Services
         public async Task IncrementAttempts(Guid id)
         {
             var attempt = await _attemptRepository.GetByIdAsync(id);
-            attempt.AttemptedNumber++;
+            attempt.NumberOfAttempts++;
             await _attemptRepository.UpdateAsync(attempt);
-        }
-
-        public async Task ResetAttempts()
-        {
-            //MysteryNumberRepository.NumberOfAttempts = 0;
-        }
-
-        public async Task SaveAttempts()
-        {
-            //MysteryNumberRepository.AttemptsList.Add(MysteryNumberRepository.NumberOfAttempts);
         }
     }
 }
