@@ -1,5 +1,7 @@
-﻿using HiloGuessing.Domain.Entities;
+﻿using HiLoGuessing.Application.Requests;
+using HiloGuessing.Domain.Entities;
 using HiLoGuessing.Application.Services.Interfaces;
+using HiLoGuessing.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HiLoGuessing.WebAPI.Controllers
@@ -23,7 +25,7 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
 
         [HttpGet("HiLoGuess/Start")]
-        public async Task<ActionResult<int>> Start()
+        public async Task<ActionResult<HiLoGuess>> Start()
         {
             var mysteryNumber = await _mysteryNumberService.CreateHiLoGuessAsync();
             return Ok(mysteryNumber);
@@ -31,10 +33,14 @@ namespace HiLoGuessing.WebAPI.Controllers
 
         [HttpPost("HiLoGuess/GetNumber")]
         public async Task<ActionResult<int>> GetNumberAsync(
-            [FromBody] int max = 10, 
-            [FromQuery] int min = 1)
+            [FromBody] GenerateNumberRequest? request)
         {
-            var mysteryNumber = await _mysteryNumberService.CreateMysteryNumberAsync(max, min);
+            if (request == null)
+            {
+                return BadRequest("Invalid request body");
+            }
+            var mysteryNumber = await _mysteryNumberService
+                .CreateMysteryNumberAsync(request.Id, request.Max, request.Min);
             return Ok(mysteryNumber);
         }
 
@@ -46,17 +52,18 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
 
         [HttpPost("HiLoGuess")]
-        public async Task<ActionResult<GuessResponse>> SendNumber([FromQuery] int number)
+        public async Task<ActionResult<GuessResponse<HiLoGuess>>> SendNumber(
+            [FromBody] SendNumberRequest request)
         {
-            var mysteryNumber = await _mysteryNumberService.GetMysteryNumber();
-            var response = _comparisonService.CompareNumber(mysteryNumber, number);
+            var mysteryNumber = await _mysteryNumberService.GetMysteryNumberAsync(request.HiloId);
+            var response = await _comparisonService.CompareNumber(mysteryNumber, request.Number);
 
             if (response.GuessResult == GuessResult.NotGenerated)
             {
                 return BadRequest(response);
             }
 
-            _attemptsService.IncrementAttempts();
+            await _attemptsService.IncrementAttempts(request.AttemptsId);
 
             return Ok(response);
         }

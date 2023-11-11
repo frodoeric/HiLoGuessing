@@ -28,11 +28,11 @@ namespace HiLoGuessing.Infrastructure.Repositories
             return await _dbContext.HiLoGuess.ToListAsync();
         }
 
-        public async Task<Guid> AddAsync(HiLoGuess entity)
+        public async Task<HiLoGuess> AddAsync(HiLoGuess entity)
         {
             var result = await _dbContext.HiLoGuess.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
-            return result.Entity.Id;
+            return result.Entity;
         }
 
         public async Task UpdateAsync(HiLoGuess entity)

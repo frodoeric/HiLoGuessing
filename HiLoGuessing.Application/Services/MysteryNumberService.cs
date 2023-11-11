@@ -13,7 +13,7 @@ namespace HiLoGuessing.Application.Services
             _hiloRepository = hiloRepository;
         }
 
-        public async Task<Guid> CreateHiLoGuessAsync()
+        public async Task<HiLoGuess> CreateHiLoGuessAsync()
         {
             var hilo = new HiLoGuess();
             return await _hiloRepository.AddAsync(hilo);
@@ -35,7 +35,7 @@ namespace HiLoGuessing.Application.Services
             return mysteryNumber?.GeneratedMysteryNumber ?? 0;
         }
 
-        public async Task<Guid> ResetHiLoGuessAsync()
+        public async Task<HiLoGuess> ResetHiLoGuessAsync()
         {
             var hilo = new HiLoGuess();
             return await _hiloRepository.AddAsync(hilo);

@@ -1,5 +1,6 @@
 ﻿using HiloGuessing.Domain.Entities;
 using HiLoGuessing.Application.Services.Interfaces;
+using HiLoGuessing.Infrastructure;
 
 namespace HiLoGuessing.Application.Services
 {
@@ -14,9 +15,9 @@ namespace HiLoGuessing.Application.Services
             _attemptsService = attemptsService;
         }
 
-        public GuessResponse CompareNumber(int mysteryNumber, int numberGuess)
+        public async Task<GuessResponse<HiLoGuess>> CompareNumber(int mysteryNumber, int numberGuess)
         {
-            var response = new GuessResponse();
+            var response = new GuessResponse<HiLoGuess>();
 
             if (mysteryNumber == 0)
             {
@@ -27,14 +28,14 @@ namespace HiLoGuessing.Application.Services
 
             if (mysteryNumber == numberGuess)
             {
-                _mysteryNumberService.ResetMysteryNumberAsync();
+                var hiloGuess = await _mysteryNumberService.ResetHiLoGuessAsync();
 
                 response.GuessResult = GuessResult.Equal;
                 response.Message = "Mystery Number Discovered!";
-
-                //todo: implement MediatoR, send notification
-                _attemptsService.SaveAttempts();
-                _attemptsService.ResetAttempts();
+                response.Data = hiloGuess;
+                
+                await _attemptsService.SaveAttempts();
+                await _attemptsService.ResetAttempts();
 
                 return response;
             }

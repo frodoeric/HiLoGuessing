@@ -16,7 +16,8 @@ namespace HiLoGuessing.Infrastructure.Repositories
 
         public async Task<Attempt> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Attempts.FindAsync(id);
+            return await _dbContext.Attempts.FindAsync(id) ??
+                   throw new KeyNotFoundException($"AttemptId: {id} not found");
         }
 
         public async Task<List<Attempt>> GetAllAsync()
@@ -24,11 +25,11 @@ namespace HiLoGuessing.Infrastructure.Repositories
             return await _dbContext.Attempts.ToListAsync();
         }
 
-        public async Task<Guid> AddAsync(Attempt entity)
+        public async Task<Attempt> AddAsync(Attempt entity)
         {
             var result = await _dbContext.Attempts.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
-            return result.Entity.Id;
+            return result.Entity;
         }
 
         public async Task UpdateAsync(Attempt entity)

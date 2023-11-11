@@ -12,7 +12,7 @@ namespace HiloGuessing.Domain.Interfaces
     {
         Task<T> GetByIdAsync(Guid id);
         Task<List<T>> GetAllAsync();
-        Task<Guid> AddAsync(T entity);
+        Task<T> AddAsync(T entity);
         Task UpdateAsync(T id);
         Task DeleteAsync(T entity);
     }

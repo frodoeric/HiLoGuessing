@@ -19,15 +19,11 @@ namespace HiLoGuessing.Application.Services
             return await _attemptRepository.GetAllAsync();
         }
 
-        public async Task IncrementAttempts()
+        public async Task IncrementAttempts(Guid id)
         {
-            var latestAttempt = await _attemptRepository.GetAllAsync();
-            var result = latestAttempt.LastOrDefault();
-            if (result != null)
-            {
-                result.AttemptedNumber++;
-                await _attemptRepository.UpdateAsync(result);
-            }
+            var attempt = await _attemptRepository.GetByIdAsync(id);
+            attempt.AttemptedNumber++;
+            await _attemptRepository.UpdateAsync(attempt);
         }
 
         public async Task ResetAttempts()
