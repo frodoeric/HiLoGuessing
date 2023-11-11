@@ -1,20 +1,20 @@
 ﻿using HiloGuessing.Domain.Interfaces;
 using HiLoGuessing.Application.Services.Interfaces;
-using HiLoGuessing.Infrastructure;
+using HiloGuessing.Domain.Entities;
 
 namespace HiLoGuessing.Application.Services
 {
     public class AttemptsService : IAttemptsService
     {
-        private readonly IRepository<Attempt> _attemptRepository;
+        private readonly IRepository<Attempts> _attemptRepository;
 
 
-        public AttemptsService(IRepository<Attempt> attemptRepository)
+        public AttemptsService(IRepository<Attempts> attemptRepository)
         {
             _attemptRepository = attemptRepository;
         }
 
-        public async Task<List<Attempt>> GetAttempts()
+        public async Task<List<Attempts>> GetAttempts()
         {
             return await _attemptRepository.GetAllAsync();
         }

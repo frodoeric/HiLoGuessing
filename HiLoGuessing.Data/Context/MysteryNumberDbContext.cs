@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HiloGuessing.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HiLoGuessing.Infrastructure.Context
@@ -10,7 +11,7 @@ namespace HiLoGuessing.Infrastructure.Context
     public class MysteryNumberDbContext : DbContext
     {
         public DbSet<HiLoGuess> HiLoGuess { get; set; }
-        public DbSet<Attempt> Attempts { get; set; }
+        public DbSet<Attempts> Attempts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,7 @@ namespace HiLoGuessing.Infrastructure.Context
         //// special "local" folder for your platform.
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
+            options.LogTo(Console.WriteLine);
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
             var DbPath = System.IO.Path.Join(path, "hilo.db");

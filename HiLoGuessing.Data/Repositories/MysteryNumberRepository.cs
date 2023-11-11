@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HiloGuessing.Domain.Entities;
 using HiloGuessing.Domain.Interfaces;
 using HiLoGuessing.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;

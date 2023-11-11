@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HiloGuessing.Domain.Entities;
 using HiloGuessing.Domain.Interfaces;
 using HiLoGuessing.Infrastructure;
 using HiLoGuessing.Infrastructure.Context;
@@ -25,7 +26,7 @@ namespace HiLoGuessing.IoC
             services.AddDbContext<MysteryNumberDbContext>();
 
             services.AddScoped<IRepository<HiLoGuess>, MysteryNumberRepository>();
-            services.AddScoped<IRepository<Attempt>, AttemptRepository>();
+            services.AddScoped<IRepository<Attempts>, AttemptRepository>();
 
             return services;
         }

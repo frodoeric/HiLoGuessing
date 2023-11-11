@@ -1,5 +1,4 @@
 ﻿using HiloGuessing.Domain.Entities;
-using HiLoGuessing.Infrastructure;
 
 namespace HiLoGuessing.Application.Services.Interfaces
 {

@@ -1,29 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace HiLoGuessing.Infrastructure
+namespace HiloGuessing.Domain.Entities
 {
     public class HiLoGuess
     {
         [Key]
-        public Guid Id { get; set; }
-        public int GeneratedMysteryNumber { get; set; }
-
-        public List<Attempt> Attempts { get; set; } = new();
+        public Guid HiLoGuessId { get; set; }
+        public int GeneratedMysteryNumber { get; set; } = 0;
+        
+        public Attempts Attempts { get; set; }
     }
 
-    public class Attempt
+    public class Attempts
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid AttemptsId { get; set; }
 
         public int NumberOfAttempts { get; set; } = 1;
 
-        public int MysteryNumberId { get; set; }
+        [JsonIgnore]
+        public Guid HiLoGuessId { get; set; }
+
+        [JsonIgnore]
+        public HiLoGuess HiLoGuess { get; set; }
     }
 
 }

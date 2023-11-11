@@ -17,52 +17,55 @@ namespace HiLoGuessing.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.Attempt", b =>
+            modelBuilder.Entity("HiLoGuessing.Infrastructure.Attempts", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AttemptsId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("HiLoGuessId")
+                    b.Property<Guid>("HiLoGuessId")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("MysteryNumberId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("NumberOfAttempts")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("AttemptsId");
 
-                    b.HasIndex("HiLoGuessId");
+                    b.HasIndex("HiLoGuessId")
+                        .IsUnique();
 
                     b.ToTable("Attempts");
                 });
 
             modelBuilder.Entity("HiLoGuessing.Infrastructure.HiLoGuess", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("HiLoGuessId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("GeneratedMysteryNumber")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("HiLoGuessId");
 
                     b.ToTable("HiLoGuess");
                 });
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.Attempt", b =>
+            modelBuilder.Entity("HiLoGuessing.Infrastructure.Attempts", b =>
                 {
-                    b.HasOne("HiLoGuessing.Infrastructure.HiLoGuess", null)
-                        .WithMany("Attempts")
-                        .HasForeignKey("HiLoGuessId");
+                    b.HasOne("HiLoGuessing.Infrastructure.HiLoGuess", "HiLoGuess")
+                        .WithOne("Attempts")
+                        .HasForeignKey("HiLoGuessing.Infrastructure.Attempts", "HiLoGuessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HiLoGuess");
                 });
 
             modelBuilder.Entity("HiLoGuessing.Infrastructure.HiLoGuess", b =>
                 {
-                    b.Navigation("Attempts");
+                    b.Navigation("Attempts")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

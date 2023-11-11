@@ -39,8 +39,8 @@ namespace HiLoGuessing.WebAPI.Controllers
             return Ok(hilo);
         }
 
-        [HttpPost("HiLoGuess/GetMysteryNumber")]
-        public async Task<ActionResult<int>> GetMysteryNumberAsync(
+        [HttpPost("HiLoGuess/GenerateMysteryNumber")]
+        public async Task<ActionResult<int>> GenerateMysteryNumber(
             [FromBody] GenerateNumberRequest? request)
         {
             if (request == null)
@@ -64,13 +64,13 @@ namespace HiLoGuessing.WebAPI.Controllers
                 return BadRequest(response);
             }
 
-            await _attemptsService.IncrementAttempts(request.AttemptsId);
+            await _attemptsService.IncrementAttempts(response.Data.Attempts.AttemptsId);
 
             return Ok(response);
         }
 
         [HttpGet("Attempts/GetAllAttempts")]
-        public ActionResult<Attempt> GetAll()
+        public ActionResult<Attempts> GetAll()
         {
             var attempts = _attemptsService.GetAttempts();
             return Ok(attempts);

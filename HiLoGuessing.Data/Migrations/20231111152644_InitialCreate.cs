@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -14,40 +15,38 @@ namespace HiLoGuessing.Infrastructure.Migrations
                 name: "HiLoGuess",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    GeneratedMysteryNumber = table.Column<int>(type: "INTEGER", maxLength: 100, nullable: false),
-                    NumberOfAttempts = table.Column<int>(type: "INTEGER", nullable: false)
+                    HiLoGuessId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    GeneratedMysteryNumber = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MysteryNumbers", x => x.Id);
+                    table.PrimaryKey("PK_HiLoGuess", x => x.HiLoGuessId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Attempts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AttemptedNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    MysteryNumberId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AttemptsId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    NumberOfAttempts = table.Column<int>(type: "INTEGER", nullable: false),
+                    HiLoGuessId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attempts", x => x.Id);
+                    table.PrimaryKey("PK_Attempts", x => x.AttemptsId);
                     table.ForeignKey(
-                        name: "FK_Attempts_MysteryNumbers_MysteryNumberId",
-                        column: x => x.MysteryNumberId,
+                        name: "FK_Attempts_HiLoGuess_HiLoGuessId",
+                        column: x => x.HiLoGuessId,
                         principalTable: "HiLoGuess",
-                        principalColumn: "Id",
+                        principalColumn: "HiLoGuessId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attempts_MysteryNumberId",
+                name: "IX_Attempts_HiLoGuessId",
                 table: "Attempts",
-                column: "MysteryNumberId");
+                column: "HiLoGuessId",
+                unique: true);
         }
 
         /// <inheritdoc />

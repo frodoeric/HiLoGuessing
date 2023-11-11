@@ -1,11 +1,12 @@
-﻿using HiloGuessing.Domain.Interfaces;
+﻿using HiloGuessing.Domain.Entities;
+using HiloGuessing.Domain.Interfaces;
 using HiLoGuessing.Infrastructure;
 using HiLoGuessing.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace HiLoGuessing.Infrastructure.Repositories
 {
-    public class AttemptRepository : IRepository<Attempt>
+    public class AttemptRepository : IRepository<Attempts>
     {
         private readonly MysteryNumberDbContext _dbContext;
 
@@ -14,31 +15,31 @@ namespace HiLoGuessing.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Attempt> GetByIdAsync(Guid id)
+        public async Task<Attempts> GetByIdAsync(Guid id)
         {
             return await _dbContext.Attempts.FindAsync(id) ??
                    throw new KeyNotFoundException($"AttemptId: {id} not found");
         }
 
-        public async Task<List<Attempt>> GetAllAsync()
+        public async Task<List<Attempts>> GetAllAsync()
         {
             return await _dbContext.Attempts.ToListAsync();
         }
 
-        public async Task<Attempt> AddAsync(Attempt entity)
+        public async Task<Attempts> AddAsync(Attempts entity)
         {
             var result = await _dbContext.Attempts.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return result.Entity;
         }
 
-        public async Task UpdateAsync(Attempt entity)
+        public async Task UpdateAsync(Attempts entity)
         {
             _dbContext.Attempts.Update(entity);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Attempt entity)
+        public async Task DeleteAsync(Attempts entity)
         {
             _dbContext.Attempts.Remove(entity);
             await _dbContext.SaveChangesAsync();
