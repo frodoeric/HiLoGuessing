@@ -4,11 +4,11 @@ using HiLoGuessing.Infrastructure;
 
 namespace HiLoGuessing.Application.Services
 {
-    public class HiLoGuessService : IHiLoGuessService
+    public class MysteryNumberService : IMysteryNumberService
     {
         private readonly IRepository<HiLoGuess> _hiloRepository;
 
-        public HiLoGuessService(IRepository<HiLoGuess> hiloRepository)
+        public MysteryNumberService(IRepository<HiLoGuess> hiloRepository)
         {
             _hiloRepository = hiloRepository;
         }
