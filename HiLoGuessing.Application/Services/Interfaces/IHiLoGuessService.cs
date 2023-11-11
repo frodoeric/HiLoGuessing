@@ -7,7 +7,7 @@ using HiLoGuessing.Infrastructure;
 
 namespace HiLoGuessing.Application.Services.Interfaces
 {
-    public interface IMysteryNumberService
+    public interface IHiLoGuessService
     {
         Task<HiLoGuess> CreateHiLoGuessAsync();
         Task<int> CreateMysteryNumberAsync(Guid id, int max, int min);

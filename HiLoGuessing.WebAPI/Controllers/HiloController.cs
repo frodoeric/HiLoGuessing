@@ -10,16 +10,16 @@ namespace HiLoGuessing.WebAPI.Controllers
     [ApiController]
     public class HiloController : ControllerBase
     {
-        private readonly IMysteryNumberService _mysteryNumberService;
+        private readonly IHiLoGuessService _hiLoGuessService;
         private readonly IAttemptsService _attemptsService;
         private readonly IComparisonService _comparisonService;
 
         public HiloController(
-            IMysteryNumberService mysteryNumberService,
+            IHiLoGuessService hiLoGuessService,
             IAttemptsService attemptsService,
             IComparisonService comparisonService)
         {
-            _mysteryNumberService = mysteryNumberService;
+            _hiLoGuessService = hiLoGuessService;
             _attemptsService = attemptsService;
             _comparisonService = comparisonService;
         }
@@ -27,7 +27,7 @@ namespace HiLoGuessing.WebAPI.Controllers
         [HttpGet("HiLoGuess/Start")]
         public async Task<ActionResult<HiLoGuess>> Start()
         {
-            var mysteryNumber = await _mysteryNumberService.CreateHiLoGuessAsync();
+            var mysteryNumber = await _hiLoGuessService.CreateHiLoGuessAsync();
             return Ok(mysteryNumber);
         }
 
@@ -35,7 +35,7 @@ namespace HiLoGuessing.WebAPI.Controllers
         public async Task<ActionResult<HiLoGuess>> GetById(
             [FromHeader] Guid id)
         {
-            var hilo = await _mysteryNumberService.GetHiLoGuessAsync(id);
+            var hilo = await _hiLoGuessService.GetHiLoGuessAsync(id);
             return Ok(hilo);
         }
 
@@ -47,7 +47,7 @@ namespace HiLoGuessing.WebAPI.Controllers
             {
                 return BadRequest("Invalid request body");
             }
-            var mysteryNumber = await _mysteryNumberService
+            var mysteryNumber = await _hiLoGuessService
                 .CreateMysteryNumberAsync(request.HiLoId, request.Max, request.Min);
             return Ok(mysteryNumber);
         }
@@ -56,7 +56,7 @@ namespace HiLoGuessing.WebAPI.Controllers
         public async Task<ActionResult<GuessResponse<HiLoGuess>>> SendNumber(
             [FromBody] SendNumberRequest request)
         {
-            var mysteryNumber = await _mysteryNumberService.GetMysteryNumberAsync(request.HiloId);
+            var mysteryNumber = await _hiLoGuessService.GetMysteryNumberAsync(request.HiloId);
             var response = await _comparisonService.CompareNumber(mysteryNumber, request.Number);
 
             if (response.GuessResult == GuessResult.NotGenerated)

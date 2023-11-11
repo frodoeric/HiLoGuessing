@@ -7,12 +7,10 @@ namespace HiLoGuessing.Application.Services
     public class ComparisonService : IComparisonService
     {
         private IHiLoGuessService _hiLoGuessService;
-        private IAttemptsService _attemptsService;
 
-        public ComparisonService(IHiLoGuessService hiLoGuessService, IAttemptsService attemptsService)
+        public ComparisonService(IHiLoGuessService hiLoGuessService)
         {
             _hiLoGuessService = hiLoGuessService;
-            _attemptsService = attemptsService;
         }
 
         public async Task<GuessResponse<HiLoGuess>> CompareNumber(int mysteryNumber, int numberGuess)
@@ -33,9 +31,6 @@ namespace HiLoGuessing.Application.Services
                 response.GuessResult = GuessResult.Equal;
                 response.Message = "Mystery Number Discovered!";
                 response.Data = hiloGuess;
-                
-                //await _attemptsService.SaveAttempts();
-                //await _attemptsService.ResetAttempts();
 
                 return response;
             }
