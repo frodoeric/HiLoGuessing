@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Register your services with the interfaces here
-builder.Services.AddScoped<IMysteryNumberService, MysteryNumberService>();
+builder.Services.AddScoped<IHiLoGuessService, HiLoGuessService>();
 builder.Services.AddScoped<IAttemptsService, AttemptsService>();
 builder.Services.AddScoped<IComparisonService, ComparisonService>();
 

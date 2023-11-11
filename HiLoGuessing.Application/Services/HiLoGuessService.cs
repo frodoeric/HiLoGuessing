@@ -4,11 +4,11 @@ using HiLoGuessing.Infrastructure;
 
 namespace HiLoGuessing.Application.Services
 {
-    public class MysteryNumberService : IMysteryNumberService
+    public class HiLoGuessService : IHiLoGuessService
     {
         private readonly IRepository<HiLoGuess> _hiloRepository;
 
-        public MysteryNumberService(IRepository<HiLoGuess> hiloRepository)
+        public HiLoGuessService(IRepository<HiLoGuess> hiloRepository)
         {
             _hiloRepository = hiloRepository;
         }
@@ -16,6 +16,13 @@ namespace HiLoGuessing.Application.Services
         public async Task<HiLoGuess> CreateHiLoGuessAsync()
         {
             var hilo = new HiLoGuess();
+            var attempt = new Attempt
+            {
+                NumberOfAttempts = 1
+            };
+
+            hilo.Attempts.Add(attempt);
+
             return await _hiloRepository.AddAsync(hilo);
         }
 
@@ -41,10 +48,10 @@ namespace HiLoGuessing.Application.Services
             return await _hiloRepository.AddAsync(hilo);
         }
 
-        //public async Task SaveAttempts(Guid id, int numberOfAttempts)
-        //{
-        //    var hilo = await _hiloRepository.GetByIdAsync(id);
-        //    hilo.Attempts.Add(numberOfAttempts);
-        //}
+        public async Task<HiLoGuess> GetHiLoGuessAsync(Guid id)
+        {
+            var hilo = await _hiloRepository.GetByIdAsync(id);
+            return hilo;
+        }
     }
 }

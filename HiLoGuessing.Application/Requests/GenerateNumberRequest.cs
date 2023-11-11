@@ -8,8 +8,8 @@ namespace HiLoGuessing.Application.Requests
 {
     public sealed class GenerateNumberRequest
     {
-        public Guid Id { get; set; }
-        public int Max { get; set; }
-        public int Min { get; set; }
+        public Guid HiLoId { get; set; }
+        public int Max { get; set; } = 10;
+        public int Min { get; set; } = 1;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using HiLoGuessing.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HiLoGuessing.Infrastructure.Migrations
 {
     [DbContext(typeof(MysteryNumberDbContext))]
-    partial class MysteryNumberDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231111140721_UpdatedAttempt")]
+    partial class UpdatedAttempt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -46,6 +49,10 @@ namespace HiLoGuessing.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("GeneratedMysteryNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NumberOfAttempts")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
