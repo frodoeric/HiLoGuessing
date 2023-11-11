@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HiLoGuessing.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,8 @@ namespace HiLoGuessing.Infrastructure.Migrations
                 name: "HiLoGuess",
                 columns: table => new
                 {
-                    HiLoGuessId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    GeneratedMysteryNumber = table.Column<int>(type: "INTEGER", nullable: false)
+                    HiLoGuessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GeneratedMysteryNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,9 +27,9 @@ namespace HiLoGuessing.Infrastructure.Migrations
                 name: "Attempts",
                 columns: table => new
                 {
-                    AttemptsId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    NumberOfAttempts = table.Column<int>(type: "INTEGER", nullable: false),
-                    HiLoGuessId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    AttemptsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NumberOfAttempts = table.Column<int>(type: "int", nullable: false),
+                    HiLoGuessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {

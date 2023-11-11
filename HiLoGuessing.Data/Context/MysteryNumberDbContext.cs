@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HiloGuessing.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace HiLoGuessing.Infrastructure.Context
 {
@@ -13,6 +14,18 @@ namespace HiLoGuessing.Infrastructure.Context
         public DbSet<HiLoGuess> HiLoGuess { get; set; }
         public DbSet<Attempts> Attempts { get; set; }
 
+        public MysteryNumberDbContext(DbContextOptions<MysteryNumberDbContext> options)
+            : base(options)
+        {
+        }
+
+        //private readonly IConfiguration _configuration;
+
+        //public MysteryNumberDbContext(IConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // To configure Fluent API for Code-First
@@ -20,17 +33,11 @@ namespace HiLoGuessing.Infrastructure.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MysteryNumberDbContext).Assembly);
         }
-
-        //// The following configures EF to create a Sqlite database file in the
-        //// special "local" folder for your platform.
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            options.LogTo(Console.WriteLine);
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            var DbPath = System.IO.Path.Join(path, "hilo.db");
-
-            options.UseSqlite($"Data Source={DbPath}");
-        }
+        
+        //protected override void OnConfiguring(DbContextOptionsBuilder options)
+        //{
+        //    var connection = _configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+        //    options.UseSqlServer(connection);
+        //}
     }
 }

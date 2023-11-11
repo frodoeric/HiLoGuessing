@@ -3,6 +3,7 @@ using System;
 using HiLoGuessing.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -11,26 +12,30 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HiLoGuessing.Infrastructure.Migrations
 {
     [DbContext(typeof(MysteryNumberDbContext))]
-    [Migration("20231111152644_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231111200716_Create")]
+    partial class Create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.Attempts", b =>
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("HiloGuessing.Domain.Entities.Attempts", b =>
                 {
                     b.Property<Guid>("AttemptsId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("HiLoGuessId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("NumberOfAttempts")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("AttemptsId");
 
@@ -40,32 +45,32 @@ namespace HiLoGuessing.Infrastructure.Migrations
                     b.ToTable("Attempts");
                 });
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.HiLoGuess", b =>
+            modelBuilder.Entity("HiloGuessing.Domain.Entities.HiLoGuess", b =>
                 {
                     b.Property<Guid>("HiLoGuessId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("GeneratedMysteryNumber")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("HiLoGuessId");
 
                     b.ToTable("HiLoGuess");
                 });
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.Attempts", b =>
+            modelBuilder.Entity("HiloGuessing.Domain.Entities.Attempts", b =>
                 {
-                    b.HasOne("HiLoGuessing.Infrastructure.HiLoGuess", "HiLoGuess")
+                    b.HasOne("HiloGuessing.Domain.Entities.HiLoGuess", "HiLoGuess")
                         .WithOne("Attempts")
-                        .HasForeignKey("HiLoGuessing.Infrastructure.Attempts", "HiLoGuessId")
+                        .HasForeignKey("HiloGuessing.Domain.Entities.Attempts", "HiLoGuessId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("HiLoGuess");
                 });
 
-            modelBuilder.Entity("HiLoGuessing.Infrastructure.HiLoGuess", b =>
+            modelBuilder.Entity("HiloGuessing.Domain.Entities.HiLoGuess", b =>
                 {
                     b.Navigation("Attempts")
                         .IsRequired();

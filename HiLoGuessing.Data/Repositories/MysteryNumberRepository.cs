@@ -21,7 +21,8 @@ namespace HiLoGuessing.Infrastructure.Repositories
 
         public async Task<HiLoGuess> GetByIdAsync(Guid id)
         {
-            return await _dbContext.HiLoGuess.FindAsync(id);
+            return await _dbContext.HiLoGuess.FindAsync(id) ?? 
+                   throw new InvalidOperationException();
         }
 
         public async Task<List<HiLoGuess>> GetAllAsync()

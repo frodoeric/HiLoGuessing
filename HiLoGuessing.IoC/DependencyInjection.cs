@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
+﻿using System.Net.Security;
 using HiloGuessing.Domain.Entities;
 using HiloGuessing.Domain.Interfaces;
-using HiLoGuessing.Infrastructure;
+using HiLoGuessing.Application.Services;
+using HiLoGuessing.Application.Services.Interfaces;
 using HiLoGuessing.Infrastructure.Context;
 using HiLoGuessing.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace HiLoGuessing.IoC
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddIoC(this IServiceCollection services,
+            string connection)
         {
-            //Todo: create param configuration
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            var DbPath = System.IO.Path.Join(path, "hilo.db");
+            services.AddDbContext<MysteryNumberDbContext>(options =>
+                               options.UseSqlServer(connection));
 
             services.AddDbContext<MysteryNumberDbContext>();
 
+            services.AddScoped<IHiLoGuessService, HiLoGuessService>();
+            services.AddScoped<IAttemptsService, AttemptsService>();
+            services.AddScoped<IComparisonService, ComparisonService>();
             services.AddScoped<IRepository<HiLoGuess>, MysteryNumberRepository>();
             services.AddScoped<IRepository<Attempts>, AttemptRepository>();
 
