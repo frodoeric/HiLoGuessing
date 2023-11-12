@@ -9,6 +9,17 @@ builder.Services.AddIoC(builder.Configuration);
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+        b =>
+        {
+            b.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -38,6 +49,8 @@ else
     });
 }
 app.UseMiddleware<ErrorHandlingMiddleware>();
+
+app.UseCors("AllowAnyOrigin");
 
 app.UseHttpsRedirection();
 
