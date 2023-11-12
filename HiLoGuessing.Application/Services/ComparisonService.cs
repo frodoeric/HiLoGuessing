@@ -5,7 +5,7 @@ namespace HiLoGuessing.Application.Services
 {
     public class ComparisonService : IComparisonService
     {
-        private IHiLoGuessService _hiLoGuessService;
+        private readonly IHiLoGuessService _hiLoGuessService;
 
         public ComparisonService(IHiLoGuessService hiLoGuessService)
         {
@@ -16,41 +16,78 @@ namespace HiLoGuessing.Application.Services
             Guid hiloId, int mysteryNumber, int numberGuess)
         {
             var response = new GuessResponse<HiLoGuess>();
+
+            if (!IsValidGuess(mysteryNumber))
+            {
+                return GetNotGeneratedResponse(response);
+            }
+
             var hiloGuess = await _hiLoGuessService.GetHiLoGuessAsync(hiloId);
 
-            if (mysteryNumber == 0)
+            if (IsCorrectGuess(mysteryNumber, numberGuess))
             {
-                response.GuessResult = GuessResult.NotGenerated;
-                response.Message = "Please Generate a new Mystery Number";
-                return response;
+                return await GetCorrectGuessResponse(response, hiloGuess, hiloId);
             }
 
-            if (mysteryNumber == numberGuess)
-            {
-                response.GuessResult = GuessResult.Equal;
-                response.Message = "Mystery Number Discovered!";
-                hiloGuess.GeneratedMysteryNumber = 0;
-                response.Data = hiloGuess;
-                await _hiLoGuessService.ResetHiLoGuessAsync(hiloId);
+            return GetComparisonResponse(response, hiloGuess, mysteryNumber, numberGuess);
+        }
 
-                return response;
-            }
+        private static bool IsValidGuess(int mysteryNumber)
+        {
+            return mysteryNumber != 0;
+        }
 
+        private static bool IsCorrectGuess(int mysteryNumber, int numberGuess)
+        {
+            return mysteryNumber == numberGuess;
+        }
+
+        private static GuessResponse<HiLoGuess> GetNotGeneratedResponse(GuessResponse<HiLoGuess> response)
+        {
+            response.GuessResult = GuessResult.NotGenerated;
+            response.Message = "Please Generate a new Mystery Number";
+            return response;
+        }
+
+        private async Task <GuessResponse<HiLoGuess>> GetCorrectGuessResponse(
+            GuessResponse<HiLoGuess> response, HiLoGuess hiloGuess, Guid hiloId)
+        {
+            response.GuessResult = GuessResult.Equal;
+            response.Message = "Mystery Number Discovered!";
+            hiloGuess.GeneratedMysteryNumber = 0;
+            response.Data = hiloGuess;
+            await _hiLoGuessService.ResetHiLoGuessAsync(hiloId);
+            return response;
+        }
+
+        private GuessResponse<HiLoGuess> GetComparisonResponse(
+            GuessResponse<HiLoGuess> response, HiLoGuess hiloGuess, int mysteryNumber, int numberGuess)
+        {
             if (mysteryNumber > numberGuess)
             {
-                
-                response.GuessResult = GuessResult.Greater;
-                response.Message = "Mystery Number is Greater than the Player's guess!";
-                response.Data = hiloGuess;
-                return response;
+                return GetGreaterResponse(response, hiloGuess);
             }
 
-            hiloGuess = await _hiLoGuessService.GetHiLoGuessAsync(hiloId);
+            return GetSmallerResponse(response, hiloGuess);
+        }
+
+        private GuessResponse<HiLoGuess> GetGreaterResponse(
+            GuessResponse<HiLoGuess> response, HiLoGuess hiloGuess)
+        {
+            response.GuessResult = GuessResult.Greater;
+            response.Message = "Mystery Number is Greater than the Player's guess!";
+            response.Data = hiloGuess;
+            return response;
+        }
+
+        private GuessResponse<HiLoGuess> GetSmallerResponse(
+            GuessResponse<HiLoGuess> response, HiLoGuess hiloGuess)
+        {
             response.GuessResult = GuessResult.Smaller;
             response.Message = "Mystery Number is Smaller than the Player's guess!";
             response.Data = hiloGuess;
-
             return response;
         }
     }
+
 }
