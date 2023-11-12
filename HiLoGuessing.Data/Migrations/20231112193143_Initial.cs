@@ -42,9 +42,35 @@ namespace HiLoGuessing.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Players",
+                columns: table => new
+                {
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HiLoGuessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.PlayerId);
+                    table.ForeignKey(
+                        name: "FK_Players_HiLoGuess_HiLoGuessId",
+                        column: x => x.HiLoGuessId,
+                        principalTable: "HiLoGuess",
+                        principalColumn: "HiLoGuessId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Attempts_HiLoGuessId",
                 table: "Attempts",
+                column: "HiLoGuessId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Players_HiLoGuessId",
+                table: "Players",
                 column: "HiLoGuessId",
                 unique: true);
         }
@@ -54,6 +80,9 @@ namespace HiLoGuessing.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Attempts");
+
+            migrationBuilder.DropTable(
+                name: "Players");
 
             migrationBuilder.DropTable(
                 name: "HiLoGuess");

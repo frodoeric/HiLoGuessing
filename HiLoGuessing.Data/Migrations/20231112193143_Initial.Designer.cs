@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HiLoGuessing.Infrastructure.Migrations
 {
     [DbContext(typeof(HiLoGuessDbContext))]
-    [Migration("20231111200440_Initial")]
+    [Migration("20231112193143_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -59,6 +59,30 @@ namespace HiLoGuessing.Infrastructure.Migrations
                     b.ToTable("HiLoGuess");
                 });
 
+            modelBuilder.Entity("HiloGuessing.Domain.Entities.Player", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("HiLoGuessId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PlayerId");
+
+                    b.HasIndex("HiLoGuessId")
+                        .IsUnique();
+
+                    b.ToTable("Players");
+                });
+
             modelBuilder.Entity("HiloGuessing.Domain.Entities.Attempts", b =>
                 {
                     b.HasOne("HiloGuessing.Domain.Entities.HiLoGuess", "HiLoGuess")
@@ -70,9 +94,23 @@ namespace HiLoGuessing.Infrastructure.Migrations
                     b.Navigation("HiLoGuess");
                 });
 
+            modelBuilder.Entity("HiloGuessing.Domain.Entities.Player", b =>
+                {
+                    b.HasOne("HiloGuessing.Domain.Entities.HiLoGuess", "HiLoGuess")
+                        .WithOne("Player")
+                        .HasForeignKey("HiloGuessing.Domain.Entities.Player", "HiLoGuessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HiLoGuess");
+                });
+
             modelBuilder.Entity("HiloGuessing.Domain.Entities.HiLoGuess", b =>
                 {
                     b.Navigation("Attempts")
+                        .IsRequired();
+
+                    b.Navigation("Player")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

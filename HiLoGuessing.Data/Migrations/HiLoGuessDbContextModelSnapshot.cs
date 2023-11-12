@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HiLoGuessing.Infrastructure.Migrations
 {
     [DbContext(typeof(HiLoGuessDbContext))]
-    partial class MysteryNumberDbContextModelSnapshot : ModelSnapshot
+    partial class HiLoGuessDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
