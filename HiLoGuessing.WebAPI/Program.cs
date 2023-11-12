@@ -1,5 +1,7 @@
 using HiLoGuessing.IoC;
 using HiLoGuessing.WebAPI.Middleware;
+using HiLoGuessing.WebAPI.SignalR.Hubs;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,8 @@ builder.Services.AddIoC(builder.Configuration);
 
 builder.Services.AddControllers();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAnyOrigin",
@@ -16,7 +20,8 @@ builder.Services.AddCors(options =>
         {
             b.AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .DisallowCredentials();
         });
 });
 
@@ -57,5 +62,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<PlayerHub>("/playerHub");
 
 app.Run();
