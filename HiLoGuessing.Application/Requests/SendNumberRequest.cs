@@ -8,8 +8,7 @@ namespace HiLoGuessing.Application.Requests
 {
     public sealed class SendNumberRequest
     {
-        public Guid HiloId { get; set; }
-        public Guid AttemptsId { get; set; }
+        public Guid HiLoGuessId { get; set; }
         public int Number { get; set; }
     }
 }

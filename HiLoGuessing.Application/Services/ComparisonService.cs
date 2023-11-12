@@ -12,9 +12,11 @@ namespace HiLoGuessing.Application.Services
             _hiLoGuessService = hiLoGuessService;
         }
 
-        public async Task<GuessResponse<HiLoGuess>> CompareNumber(int mysteryNumber, int numberGuess)
+        public async Task<GuessResponse<HiLoGuess>> CompareNumber(
+            Guid hiloId, int mysteryNumber, int numberGuess)
         {
             var response = new GuessResponse<HiLoGuess>();
+            var hiloGuess = await _hiLoGuessService.GetHiLoGuessAsync(hiloId);
 
             if (mysteryNumber == 0)
             {
@@ -25,24 +27,28 @@ namespace HiLoGuessing.Application.Services
 
             if (mysteryNumber == numberGuess)
             {
-                var hiloGuess = await _hiLoGuessService.ResetHiLoGuessAsync();
-
                 response.GuessResult = GuessResult.Equal;
                 response.Message = "Mystery Number Discovered!";
+                hiloGuess.GeneratedMysteryNumber = 0;
                 response.Data = hiloGuess;
+                await _hiLoGuessService.ResetHiLoGuessAsync(hiloId);
 
                 return response;
             }
 
             if (mysteryNumber > numberGuess)
             {
+                
                 response.GuessResult = GuessResult.Greater;
                 response.Message = "Mystery Number is Greater than the Player's guess!";
+                response.Data = hiloGuess;
                 return response;
             }
 
+            hiloGuess = await _hiLoGuessService.GetHiLoGuessAsync(hiloId);
             response.GuessResult = GuessResult.Smaller;
             response.Message = "Mystery Number is Smaller than the Player's guess!";
+            response.Data = hiloGuess;
 
             return response;
         }

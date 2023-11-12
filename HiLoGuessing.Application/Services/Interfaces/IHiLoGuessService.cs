@@ -12,7 +12,8 @@ namespace HiLoGuessing.Application.Services.Interfaces
         Task<HiLoGuess> CreateHiLoGuessAsync();
         Task<int> CreateMysteryNumberAsync(Guid id, int max, int min);
         Task<int> GetMysteryNumberAsync(Guid id);
-        Task<HiLoGuess> ResetHiLoGuessAsync();
+        Task ResetHiLoGuessAsync(Guid id);
         Task<HiLoGuess> GetHiLoGuessAsync(Guid id);
+        Task<List<HiLoGuess>> GetAllHiLoGuessesAsync();
     }
 }

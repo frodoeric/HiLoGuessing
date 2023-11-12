@@ -17,7 +17,7 @@ namespace HiloGuessing.Domain.Entities
         [Key]
         public Guid AttemptsId { get; set; }
 
-        public int NumberOfAttempts { get; set; } = 1;
+        public int NumberOfAttempts { get; set; } = 0;
 
         [JsonIgnore]
         public Guid HiLoGuessId { get; set; }

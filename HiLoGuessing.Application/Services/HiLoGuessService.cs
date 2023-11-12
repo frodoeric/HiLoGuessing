@@ -13,13 +13,15 @@ namespace HiLoGuessing.Application.Services
             _hiloRepository = hiloRepository;
         }
 
+        public async Task<List<HiLoGuess>> GetAllHiLoGuessesAsync()
+        {
+            return await _hiloRepository.GetAllAsync();
+        }
+
         public async Task<HiLoGuess> CreateHiLoGuessAsync()
         {
             var hilo = new HiLoGuess();
-            var attempt = new Attempts
-            {
-                NumberOfAttempts = 1
-            };
+            var attempt = new Attempts();
 
             hilo.Attempts = attempt;
 
@@ -42,10 +44,11 @@ namespace HiLoGuessing.Application.Services
             return mysteryNumber?.GeneratedMysteryNumber ?? 0;
         }
 
-        public async Task<HiLoGuess> ResetHiLoGuessAsync()
+        public async Task ResetHiLoGuessAsync(Guid id)
         {
-            var hilo = new HiLoGuess();
-            return await _hiloRepository.AddAsync(hilo);
+            var hilo = await _hiloRepository.GetByIdAsync(id);
+            hilo.GeneratedMysteryNumber = 0;
+            await _hiloRepository.UpdateAsync(hilo);
         }
 
         public async Task<HiLoGuess> GetHiLoGuessAsync(Guid id)
