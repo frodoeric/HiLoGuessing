@@ -26,6 +26,11 @@ namespace HiLoGuessing.WebAPI.SignalR.Hubs
             await Clients.All.SendAsync("SentGuess", hiLoGuess);
         }
 
+        public async Task SendMysteryNumber(string hiLoGuessId, string mysteryNumber)
+        {
+            await Clients.All.SendAsync("ReceiveMysteryNumber", hiLoGuessId, mysteryNumber);
+        }
+
         public async Task JoinGroup(string groupName)
         {
             GroupName = groupName;
