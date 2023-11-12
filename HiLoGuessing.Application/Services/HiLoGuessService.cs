@@ -56,38 +56,5 @@ namespace HiLoGuessing.Application.Services
             var hilo = await _hiloRepository.GetByIdAsync(id);
             return hilo;
         }
-
-        private HiLoGuessDto GetHiLoGuessDto(HiLoGuess hiLoGuessEntity)
-        {
-            var hiLoGuessDto = new HiLoGuessDto
-            {
-                HiLoGuessId = hiLoGuessEntity.HiLoGuessId,
-                GeneratedMysteryNumber = hiLoGuessEntity.GeneratedMysteryNumber,
-                NumberOfAttempts = hiLoGuessEntity.Attempts?.NumberOfAttempts ?? 0,
-                Attempts = new AttemptsDto
-                {
-                    AttemptsId = hiLoGuessEntity.Attempts.AttemptsId,
-                    NumberOfAttempts = hiLoGuessEntity.Attempts.NumberOfAttempts
-                }
-            };
-
-            return hiLoGuessDto;
-        }
     }
-
-    public class HiLoGuessDto
-    {
-        public Guid HiLoGuessId { get; set; }
-        public int GeneratedMysteryNumber { get; set; }
-        public int NumberOfAttempts { get; set; }
-
-        public AttemptsDto Attempts { get; set; }
-    }
-
-    public class AttemptsDto
-    {
-        public Guid AttemptsId { get; set; }
-        public int NumberOfAttempts { get; set; }
-    }
-
 }
