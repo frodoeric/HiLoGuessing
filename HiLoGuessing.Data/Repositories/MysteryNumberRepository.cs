@@ -12,9 +12,9 @@ namespace HiLoGuessing.Infrastructure.Repositories
 {
     public class MysteryNumberRepository : IRepository<HiLoGuess>
     {
-        private readonly MysteryNumberDbContext _dbContext;
+        private readonly HiLoGuessDbContext _dbContext;
 
-        public MysteryNumberRepository(MysteryNumberDbContext dbContext)
+        public MysteryNumberRepository(HiLoGuessDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HiLoGuessing.Infrastructure.Migrations
 {
-    [DbContext(typeof(MysteryNumberDbContext))]
+    [DbContext(typeof(HiLoGuessDbContext))]
     [Migration("20231111200716_Create")]
     partial class Create
     {

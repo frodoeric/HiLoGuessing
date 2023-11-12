@@ -1,22 +1,11 @@
-using HiLoGuessing.Application.Services.Interfaces;
-using HiLoGuessing.Application.Services;
-using HiLoGuessing.Infrastructure;
 using HiLoGuessing.IoC;
+using HiLoGuessing.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string? connection;
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
-    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-}
-else
-{
-    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
-}
+builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json", optional: true);
 
-if (connection != null) builder.Services.AddIoC(connection);
+builder.Services.AddIoC(builder.Configuration);
 
 builder.Services.AddControllers();
 
@@ -48,6 +37,7 @@ else
         options.RoutePrefix = string.Empty;
     });
 }
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

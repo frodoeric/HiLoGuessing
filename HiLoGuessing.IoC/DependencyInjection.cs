@@ -6,6 +6,7 @@ using HiLoGuessing.Application.Services.Interfaces;
 using HiLoGuessing.Infrastructure.Context;
 using HiLoGuessing.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HiLoGuessing.IoC
@@ -13,12 +14,12 @@ namespace HiLoGuessing.IoC
     public static class DependencyInjection
     {
         public static IServiceCollection AddIoC(this IServiceCollection services,
-            string connection)
+            IConfiguration configuration)
         {
-            services.AddDbContext<MysteryNumberDbContext>(options =>
-                               options.UseSqlServer(connection));
+            services.AddDbContext<HiLoGuessDbContext>(options =>
+                               options.UseSqlServer(configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
 
-            services.AddDbContext<MysteryNumberDbContext>();
+            services.AddDbContext<HiLoGuessDbContext>();
 
             services.AddScoped<IHiLoGuessService, HiLoGuessService>();
             services.AddScoped<IAttemptsService, AttemptsService>();

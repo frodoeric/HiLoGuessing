@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HiLoGuessing.Infrastructure.Migrations
 {
-    [DbContext(typeof(MysteryNumberDbContext))]
+    [DbContext(typeof(HiLoGuessDbContext))]
     partial class MysteryNumberDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

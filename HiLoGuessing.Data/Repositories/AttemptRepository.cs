@@ -8,9 +8,9 @@ namespace HiLoGuessing.Infrastructure.Repositories
 {
     public class AttemptRepository : IRepository<Attempts>
     {
-        private readonly MysteryNumberDbContext _dbContext;
+        private readonly HiLoGuessDbContext _dbContext;
 
-        public AttemptRepository(MysteryNumberDbContext dbContext)
+        public AttemptRepository(HiLoGuessDbContext dbContext)
         {
             _dbContext = dbContext;
         }
