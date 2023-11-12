@@ -1,7 +1,9 @@
 ﻿using HiloGuessing.Domain.Entities;
 using HiLoGuessing.Application.Requests;
 using HiLoGuessing.Application.Services.Interfaces;
+using HiLoGuessing.WebAPI.SignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HiLoGuessing.WebAPI.Controllers
 {
@@ -12,22 +14,43 @@ namespace HiLoGuessing.WebAPI.Controllers
         private readonly IHiLoGuessService _hiLoGuessService;
         private readonly IAttemptsService _attemptsService;
         private readonly IComparisonService _comparisonService;
+        private readonly IHubContext<PlayerHub> _playerHubContext;
 
         public HiloController(
             IHiLoGuessService hiLoGuessService,
             IAttemptsService attemptsService,
-            IComparisonService comparisonService)
+            IComparisonService comparisonService,
+            IHubContext<PlayerHub> playerHubContext)
         {
             _hiLoGuessService = hiLoGuessService;
             _attemptsService = attemptsService;
             _comparisonService = comparisonService;
+            _playerHubContext = playerHubContext;
+        }
+
+        [HttpGet("join")]
+        public async Task<ActionResult<HiLoGuess>> Join(string playerName, string connectionId)
+        {
+            var hiLoGuess = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
+
+            // Generate a group name using the hiLoGuess.Id for the session
+            var groupName = hiLoGuess.HiLoGuessId.ToString();
+
+            // Tell the client to join the group
+            await _playerHubContext.Clients.Client(connectionId).SendAsync("JoinGroup", groupName);
+
+            // Send a message to everyone in the group that a player has joined
+            await _playerHubContext.Clients.Group(groupName).SendAsync("PlayerJoined", $"{playerName} joined the session.");
+
+            return Ok(hiLoGuess);
         }
 
         [HttpGet("start")]
         public async Task<ActionResult<HiLoGuess>> Start(string playerName)
         {
-            var mysteryNumber = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
-            return Ok(mysteryNumber);
+            var hiLoGuess = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
+            await _playerHubContext.Clients.All.SendAsync("PlayerJoined", hiLoGuess);
+            return Ok(hiLoGuess);
         }
 
         [HttpGet("hilo-guess/{id}")]
@@ -57,7 +80,8 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
 
         [HttpPost("send-guess-number")]
-        public async Task<ActionResult<GuessResponse<HiLoGuess>>> SendGuessNumber([FromBody] SendNumberRequest request)
+        public async Task<ActionResult<GuessResponse<HiLoGuess>>> SendGuessNumber(
+            [FromBody] SendNumberRequest request)
         {
             var mysteryNumber = await _hiLoGuessService.GetMysteryNumberAsync(request.HiLoGuessId);
             var response = await _comparisonService.CompareNumber(
@@ -69,6 +93,12 @@ namespace HiLoGuessing.WebAPI.Controllers
             }
 
             await _attemptsService.IncrementAttempts(response.Data.Attempts.AttemptsId);
+            await _playerHubContext.Clients.All.SendAsync("SentGuess", response.Data);
+
+            if (response.GuessResult == GuessResult.Equal)
+            {
+                await _playerHubContext.Clients.All.SendAsync("PlayerGuessed", response.Data);
+            }
 
             return Ok(response);
         }
