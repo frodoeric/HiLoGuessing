@@ -9,6 +9,10 @@ namespace HiLoGuessing.Infrastructure.EntitiesConfiguration
         public void Configure(EntityTypeBuilder<Attempts> builder)
         {
             builder.HasKey(a => a.AttemptsId);
+
+            builder.HasOne(a => a.HiLoGuess)
+                .WithOne(h => h.Attempts)
+                .HasForeignKey<Attempts>(a => a.HiLoGuessId);
         }
     }
 }

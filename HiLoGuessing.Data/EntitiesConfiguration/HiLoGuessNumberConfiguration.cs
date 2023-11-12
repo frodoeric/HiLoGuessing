@@ -19,10 +19,6 @@ namespace HiLoGuessing.Infrastructure.EntitiesConfiguration
             builder.HasOne(h => h.Player)
                 .WithOne(p => p.HiLoGuess)
                 .HasForeignKey<Player>(p => p.HiLoGuessId);
-
-            builder.HasOne(h => h.Attempts)
-                .WithOne(a => a.HiLoGuess)
-                .HasForeignKey<Attempts>(a => a.HiLoGuessId);
         }
     }
 }
