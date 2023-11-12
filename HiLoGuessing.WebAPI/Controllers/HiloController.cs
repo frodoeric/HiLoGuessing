@@ -32,14 +32,11 @@ namespace HiLoGuessing.WebAPI.Controllers
         public async Task<ActionResult<HiLoGuess>> Join(string playerName, string connectionId)
         {
             var hiLoGuess = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
-
-            // Generate a group name using the hiLoGuess.Id for the session
+            
             var groupName = hiLoGuess.HiLoGuessId.ToString();
-
-            // Tell the client to join the group
+            
             await _playerHubContext.Clients.Client(connectionId).SendAsync("JoinGroup", groupName);
-
-            // Send a message to everyone in the group that a player has joined
+            
             await _playerHubContext.Clients.Group(groupName).SendAsync("PlayerJoined", $"{playerName} joined the session.");
 
             return Ok(hiLoGuess);
@@ -75,7 +72,9 @@ namespace HiLoGuessing.WebAPI.Controllers
             {
                 return BadRequest("Invalid request body");
             }
-            var mysteryNumber = await _hiLoGuessService.CreateMysteryNumberAsync(request.HiLoGuessId, request.Max, request.Min);
+            var mysteryNumber = await _hiLoGuessService.CreateMysteryNumberAsync(
+                request.HiLoGuessId, request.Max, request.Min);
+            await _playerHubContext.Clients.All.SendAsync("ReceiveMysteryNumber", request.HiLoGuessId, mysteryNumber);
             return Ok(mysteryNumber);
         }
 
