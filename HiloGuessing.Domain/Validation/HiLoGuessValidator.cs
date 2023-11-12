@@ -8,11 +8,11 @@ using HiloGuessing.Domain.Entities;
 
 namespace HiloGuessing.Domain.Validation
 {
-    internal class UserValidator : AbstractValidator<User>
+    internal class HiLoGuessValidator : AbstractValidator<HiLoGuess>
     {
-        public UserValidator()
+        public HiLoGuessValidator()
         {
-            RuleFor(u => u.Name).NotNull().NotEmpty().GreaterThan("3");
+            RuleFor(u => u.GeneratedMysteryNumber).NotNull().NotEmpty().GreaterThan(100);
         }
     }
 }

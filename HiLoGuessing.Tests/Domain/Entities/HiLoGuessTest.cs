@@ -2,9 +2,9 @@ using FluentAssertions;
 using HiloGuessing.Domain.Entities;
 using HiloGuessing.Domain.Validation;
 
-namespace HiLoGuessing.Tests
+namespace HiLoGuessing.Tests.Domain.Entities
 {
-    public class ScoreTests
+    public class HiLoGuessingTests
     {
         [SetUp]
         public void Setup()
@@ -14,7 +14,7 @@ namespace HiLoGuessing.Tests
         [Test]
         public void CreateScore_WithValidPoints()
         {
-            Action action = () => new Score(1, 1);
+            Action action = () => new HiLoGuess();
             action.Should().NotThrow<DomainExceptionValidation>();
         }
     }
