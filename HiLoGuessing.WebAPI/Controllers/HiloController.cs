@@ -24,44 +24,40 @@ namespace HiLoGuessing.WebAPI.Controllers
             _comparisonService = comparisonService;
         }
 
-        [HttpGet("HiLoGuess/Start")]
+        [HttpGet("start")]
         public async Task<ActionResult<HiLoGuess>> Start()
         {
             var mysteryNumber = await _hiLoGuessService.CreateHiLoGuessAsync();
             return Ok(mysteryNumber);
         }
 
-        [HttpGet("HiLoGuess/GetHiLoGuessById")]
-        public async Task<ActionResult<HiLoGuess>> GetById(
-            [FromHeader] Guid id)
+        [HttpGet("hilo-guess/{id}")]
+        public async Task<ActionResult<HiLoGuess>> GetHiLoGuessById(Guid id)
         {
             var hilo = await _hiLoGuessService.GetHiLoGuessAsync(id);
             return Ok(hilo);
         }
 
-        [HttpGet("Attempts/GetAllHiLoGuess")]
-        public async Task<ActionResult<List<HiLoGuess>>> GetAll()
+        [HttpGet("attempts")]
+        public async Task<ActionResult<List<HiLoGuess>>> GetAllHiLoGuesses()
         {
             var hiloGuess = await _hiLoGuessService.GetAllHiLoGuessesAsync();
             return Ok(hiloGuess);
         }
 
-        [HttpPost("HiLoGuess/GenerateMysteryNumber")]
-        public async Task<ActionResult<int>> GenerateMysteryNumber(
-            [FromBody] GenerateNumberRequest? request)
+        [HttpPost("generate-mystery-number")]
+        public async Task<ActionResult<int>> GenerateMysteryNumber([FromBody] GenerateNumberRequest? request)
         {
             if (request == null)
             {
                 return BadRequest("Invalid request body");
             }
-            var mysteryNumber = await _hiLoGuessService
-                .CreateMysteryNumberAsync(request.HiLoGuessId, request.Max, request.Min);
+            var mysteryNumber = await _hiLoGuessService.CreateMysteryNumberAsync(request.HiLoGuessId, request.Max, request.Min);
             return Ok(mysteryNumber);
         }
 
-        [HttpPost("HiLoGuess/SendGuessNumber")]
-        public async Task<ActionResult<GuessResponse<HiLoGuess>>> SendNumber(
-            [FromBody] SendNumberRequest request)
+        [HttpPost("send-guess-number")]
+        public async Task<ActionResult<GuessResponse<HiLoGuess>>> SendGuessNumber([FromBody] SendNumberRequest request)
         {
             var mysteryNumber = await _hiLoGuessService.GetMysteryNumberAsync(request.HiLoGuessId);
             var response = await _comparisonService.CompareNumber(
