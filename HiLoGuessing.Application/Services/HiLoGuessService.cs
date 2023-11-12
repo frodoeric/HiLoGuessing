@@ -18,12 +18,15 @@ namespace HiLoGuessing.Application.Services
             return await _hiloRepository.GetAllAsync();
         }
 
-        public async Task<HiLoGuess> CreateHiLoGuessAsync()
+        public async Task<HiLoGuess> CreateHiLoGuessAsync(string playerName)
         {
+            //todo: create require property
             var hilo = new HiLoGuess();
+            var player = new Player() { Name = playerName };
             var attempt = new Attempts();
 
             hilo.Attempts = attempt;
+            hilo.Player = player;
 
             return await _hiloRepository.AddAsync(hilo);
         }

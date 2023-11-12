@@ -48,7 +48,7 @@ namespace HiLoGuessing.Tests.Application.Services
             _mockHiLoRepository.Setup(repo => repo.AddAsync(It.IsAny<HiLoGuess>())).ReturnsAsync(expectedHiLoGuess);
 
             // Act
-            var result = await _hiLoGuessService.CreateHiLoGuessAsync();
+            var result = await _hiLoGuessService.CreateHiLoGuessAsync("John");
 
             // Assert
             Assert.That(result, Is.EqualTo(expectedHiLoGuess));

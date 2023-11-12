@@ -9,7 +9,7 @@ namespace HiLoGuessing.Application.Services.Interfaces
 {
     public interface IHiLoGuessService
     {
-        Task<HiLoGuess> CreateHiLoGuessAsync();
+        Task<HiLoGuess> CreateHiLoGuessAsync(string playerName);
         Task<int> CreateMysteryNumberAsync(Guid id, int max, int min);
         Task<int> GetMysteryNumberAsync(Guid id);
         Task ResetHiLoGuessAsync(Guid id);

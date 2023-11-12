@@ -7,6 +7,7 @@ namespace HiLoGuessing.Infrastructure.Context
     {
         public DbSet<HiLoGuess> HiLoGuess { get; set; }
         public DbSet<Attempts> Attempts { get; set; }
+        public DbSet<Player> Players { get; set; }
 
         public HiLoGuessDbContext(DbContextOptions<HiLoGuessDbContext> options)
             : base(options)
