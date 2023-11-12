@@ -1,10 +1,10 @@
-﻿using HiloGuessing.Domain.Entities;
-using HiloGuessing.Domain.Interfaces;
-using HiLoGuessing.Application.Services;
+﻿using HiLoGuessing.Application.Services;
 using HiLoGuessing.Application.Services.Interfaces;
+using HiloGuessing.Domain.Entities;
+using HiloGuessing.Domain.Interfaces;
 using Moq;
 
-namespace HiLoGuessing.Tests.Services
+namespace HiLoGuessing.Tests.Application.Services
 {
     [TestFixture]
     public class AttemptsServiceTests
