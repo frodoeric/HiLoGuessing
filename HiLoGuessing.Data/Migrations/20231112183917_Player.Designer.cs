@@ -4,6 +4,7 @@ using HiLoGuessing.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HiLoGuessing.Infrastructure.Migrations
 {
     [DbContext(typeof(HiLoGuessDbContext))]
-    partial class MysteryNumberDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231112183917_Player")]
+    partial class Player
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +71,7 @@ namespace HiLoGuessing.Infrastructure.Migrations
                     b.Property<Guid>("HiLoGuessId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Namer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

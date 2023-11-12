@@ -1,7 +1,6 @@
-﻿using HiLoGuessing.Application.Requests;
-using HiloGuessing.Domain.Entities;
+﻿using HiloGuessing.Domain.Entities;
+using HiLoGuessing.Application.Requests;
 using HiLoGuessing.Application.Services.Interfaces;
-using HiLoGuessing.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HiLoGuessing.WebAPI.Controllers
@@ -25,9 +24,9 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
 
         [HttpGet("start")]
-        public async Task<ActionResult<HiLoGuess>> Start()
+        public async Task<ActionResult<HiLoGuess>> Start(string playerName)
         {
-            var mysteryNumber = await _hiLoGuessService.CreateHiLoGuessAsync();
+            var mysteryNumber = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
             return Ok(mysteryNumber);
         }
 
@@ -46,7 +45,8 @@ namespace HiLoGuessing.WebAPI.Controllers
         }
 
         [HttpPost("generate-mystery-number")]
-        public async Task<ActionResult<int>> GenerateMysteryNumber([FromBody] GenerateNumberRequest? request)
+        public async Task<ActionResult<int>> GenerateMysteryNumber(
+            [FromBody] GenerateNumberRequest? request)
         {
             if (request == null)
             {
