@@ -15,36 +15,26 @@ namespace HiLoGuessing.WebAPI.Controllers
         private readonly IAttemptsService _attemptsService;
         private readonly IComparisonService _comparisonService;
         private readonly IHubContext<PlayerHub> _playerHubContext;
+        private readonly ILogger<HiloController> _logger;
 
         public HiloController(
             IHiLoGuessService hiLoGuessService,
             IAttemptsService attemptsService,
             IComparisonService comparisonService,
-            IHubContext<PlayerHub> playerHubContext)
+            IHubContext<PlayerHub> playerHubContext,
+            ILogger<HiloController> logger)
         {
             _hiLoGuessService = hiLoGuessService;
             _attemptsService = attemptsService;
             _comparisonService = comparisonService;
             _playerHubContext = playerHubContext;
-        }
-
-        [HttpGet("join")]
-        public async Task<ActionResult<HiLoGuess>> Join(string playerName, string connectionId)
-        {
-            var hiLoGuess = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
-            
-            var groupName = hiLoGuess.HiLoGuessId.ToString();
-            
-            await _playerHubContext.Clients.Client(connectionId).SendAsync("JoinGroup", groupName);
-            
-            await _playerHubContext.Clients.Group(groupName).SendAsync("PlayerJoined", $"{playerName} joined the session.");
-
-            return Ok(hiLoGuess);
+            _logger = logger;
         }
 
         [HttpGet("start")]
         public async Task<ActionResult<HiLoGuess>> Start(string playerName)
         {
+            _logger.LogInformation("{player} started the game", playerName);
             var hiLoGuess = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
             await _playerHubContext.Clients.All.SendAsync("PlayerJoined", hiLoGuess);
             return Ok(hiLoGuess);

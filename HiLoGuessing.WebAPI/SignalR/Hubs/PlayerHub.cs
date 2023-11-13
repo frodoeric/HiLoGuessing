@@ -31,24 +31,6 @@ namespace HiLoGuessing.WebAPI.SignalR.Hubs
             await Clients.All.SendAsync("ReceiveMysteryNumber", hiLoGuessId, mysteryNumber);
         }
 
-        public async Task JoinGroup(string groupName)
-        {
-            GroupName = groupName;
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-            await Clients.Group(groupName).SendAsync("PlayerJoined", $"{Context.ConnectionId} joined {groupName}");
-        }
-
-        public async override Task OnDisconnectedAsync(Exception exception)
-        {
-            // Access the group name associated with the connection
-            var groupName = Context.GetHttpContext().Request.Query["group"].ToString();
-
-            // Remove the disconnected player from the group
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-
-            await base.OnDisconnectedAsync(exception);
-        }
-
     }
 
 }
