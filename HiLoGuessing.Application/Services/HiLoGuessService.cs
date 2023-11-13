@@ -1,6 +1,7 @@
 ﻿using HiloGuessing.Domain.Interfaces;
 using HiLoGuessing.Application.Services.Interfaces;
 using HiloGuessing.Domain.Entities;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HiLoGuessing.Application.Services
 {
@@ -39,6 +40,13 @@ namespace HiLoGuessing.Application.Services
 
             await _hiloRepository.UpdateAsync(hilo);
             return next;
+        }
+
+        public async Task UpdateHiLoGuessMysteryNumberAsync(Guid id, int generatedMysteryNumber)
+        {
+            var hilo = await _hiloRepository.GetByIdAsync(id);
+            hilo.GeneratedMysteryNumber = generatedMysteryNumber;
+            await _hiloRepository.UpdateAsync(hilo);
         }
 
         public async Task<int> GetMysteryNumberAsync(Guid id)

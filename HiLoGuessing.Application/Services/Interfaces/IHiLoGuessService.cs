@@ -15,5 +15,6 @@ namespace HiLoGuessing.Application.Services.Interfaces
         Task ResetHiLoGuessAsync(Guid id);
         Task<HiLoGuess> GetHiLoGuessAsync(Guid id);
         Task<List<HiLoGuess>> GetAllHiLoGuessesAsync();
+        Task UpdateHiLoGuessMysteryNumberAsync(Guid id, int generatedMysteryNumber);
     }
 }

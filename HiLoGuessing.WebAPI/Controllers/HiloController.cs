@@ -28,20 +28,6 @@ namespace HiLoGuessing.WebAPI.Controllers
             _playerHubContext = playerHubContext;
         }
 
-        [HttpGet("join")]
-        public async Task<ActionResult<HiLoGuess>> Join(string playerName, string connectionId)
-        {
-            var hiLoGuess = await _hiLoGuessService.CreateHiLoGuessAsync(playerName);
-            
-            var groupName = hiLoGuess.HiLoGuessId.ToString();
-            
-            await _playerHubContext.Clients.Client(connectionId).SendAsync("JoinGroup", groupName);
-            
-            await _playerHubContext.Clients.Group(groupName).SendAsync("PlayerJoined", $"{playerName} joined the session.");
-
-            return Ok(hiLoGuess);
-        }
-
         [HttpGet("start")]
         public async Task<ActionResult<HiLoGuess>> Start(string playerName)
         {

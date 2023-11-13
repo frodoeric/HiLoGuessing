@@ -1,10 +1,19 @@
 ﻿using HiloGuessing.Domain.Entities;
+using HiLoGuessing.Application.Services;
+using HiLoGuessing.Application.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace HiLoGuessing.WebAPI.SignalR.Hubs
 {
     public class PlayerHub : Hub
     {
+        private readonly IHiLoGuessService _hiLoGuessService;
+
+        public PlayerHub(IHiLoGuessService hiLoGuessService)
+        {
+            _hiLoGuessService = hiLoGuessService;
+        }
+
         public string GroupName { get; set; }
         public async Task SendMessage(string user, string message)
         {
@@ -26,27 +35,10 @@ namespace HiLoGuessing.WebAPI.SignalR.Hubs
             await Clients.All.SendAsync("SentGuess", hiLoGuess);
         }
 
-        public async Task SendMysteryNumber(string hiLoGuessId, string mysteryNumber)
+        public async Task SendMysteryNumber(Guid hiLoGuessId, int mysteryNumber)
         {
+            await _hiLoGuessService.UpdateHiLoGuessMysteryNumberAsync(hiLoGuessId, mysteryNumber);
             await Clients.All.SendAsync("ReceiveMysteryNumber", hiLoGuessId, mysteryNumber);
-        }
-
-        public async Task JoinGroup(string groupName)
-        {
-            GroupName = groupName;
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-            await Clients.Group(groupName).SendAsync("PlayerJoined", $"{Context.ConnectionId} joined {groupName}");
-        }
-
-        public async override Task OnDisconnectedAsync(Exception exception)
-        {
-            // Access the group name associated with the connection
-            var groupName = Context.GetHttpContext().Request.Query["group"].ToString();
-
-            // Remove the disconnected player from the group
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-
-            await base.OnDisconnectedAsync(exception);
         }
 
     }
