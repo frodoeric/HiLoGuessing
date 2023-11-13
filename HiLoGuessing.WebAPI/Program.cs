@@ -1,6 +1,7 @@
 using HiLoGuessing.IoC;
 using HiLoGuessing.WebAPI.Middleware;
 using HiLoGuessing.WebAPI.SignalR.Hubs;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,9 @@ builder.Services.AddIoC(builder.Configuration);
 builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddCors(options =>
 {
@@ -56,6 +60,8 @@ else
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseCors("AllowAnyOrigin");
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

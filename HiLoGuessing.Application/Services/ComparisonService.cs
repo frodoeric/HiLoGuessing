@@ -1,15 +1,18 @@
 ﻿using HiloGuessing.Domain.Entities;
 using HiLoGuessing.Application.Services.Interfaces;
+using Serilog;
 
 namespace HiLoGuessing.Application.Services
 {
     public class ComparisonService : IComparisonService
     {
         private readonly IHiLoGuessService _hiLoGuessService;
+        private readonly ILogger _logger;
 
-        public ComparisonService(IHiLoGuessService hiLoGuessService)
+        public ComparisonService(IHiLoGuessService hiLoGuessService, ILogger logger)
         {
             _hiLoGuessService = hiLoGuessService;
+            _logger = logger;
         }
 
         public async Task<GuessResponse<HiLoGuess>> CompareNumber(
@@ -52,12 +55,21 @@ namespace HiLoGuessing.Application.Services
         private async Task <GuessResponse<HiLoGuess>> GetCorrectGuessResponse(
             GuessResponse<HiLoGuess> response, HiLoGuess hiloGuess, Guid hiloId)
         {
-            response.GuessResult = GuessResult.Equal;
-            response.Message = "Mystery Number Discovered!";
-            hiloGuess.GeneratedMysteryNumber = 0;
-            response.Data = hiloGuess;
-            await _hiLoGuessService.ResetHiLoGuessAsync(hiloId);
-            return response;
+            try
+            {
+                _logger.Information("Correct Guess");
+                response.GuessResult = GuessResult.Equal;
+                response.Message = "Mystery Number Discovered!";
+                hiloGuess.GeneratedMysteryNumber = 0;
+                response.Data = hiloGuess;
+                await _hiLoGuessService.ResetHiLoGuessAsync(hiloId);
+                return response;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Error resetting hilo guess");
+                throw;
+            }
         }
 
         private GuessResponse<HiLoGuess> GetComparisonResponse(
