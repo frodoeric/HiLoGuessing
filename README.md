@@ -50,7 +50,7 @@ Ensure to properly configure the database connection in the `appsettings.json` f
 To create and apply migrations to the database, use the following commands:
 
 ```bash
-dotnet ef migrations add MigrationName --project YourProject --startup-project HiLoGuessing.WebAPI
+dotnet ef migrations add MigrationName --project HiloGuessing.Data --startup-project HiLoGuessing.WebAPI
 ```
 
 Replace `MigrationName` with a meaningful name for the migration.
@@ -58,7 +58,7 @@ Replace `MigrationName` with a meaningful name for the migration.
 Then, run the following command to apply the migration to the database:
 
 ```bash
-dotnet ef database update --project YourProject --startup-project HiLoGuessing.WebAPI
+dotnet ef database update --project HiloGuessing.Data --startup-project HiLoGuessing.WebAPI
 ```
 
 This command will create or update the database according to the pending migrations.
@@ -71,7 +71,7 @@ Now that the database is configured, you can start the application:
 dotnet run --project HiLoGuessing.WebAPI
 ```
 
-The application, based on the High-Low Guessing Game, will be accessible at `https://localhost:5001` by default.
+The application, based on the High-Low Guessing Game, will be accessible at `https://localhost:(available port)` by default.
 
 ## Contribution
 
