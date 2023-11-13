@@ -1,7 +1,9 @@
-﻿using HiloGuessing.Domain.Entities;
+﻿using HiLoGuessing.Application.Models;
+using HiloGuessing.Domain.Entities;
 using HiLoGuessing.Application.Requests;
 using HiLoGuessing.Application.Services.Interfaces;
 using HiLoGuessing.WebAPI.SignalR.Hubs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -9,23 +11,45 @@ namespace HiLoGuessing.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HiloController : ControllerBase
     {
         private readonly IHiLoGuessService _hiLoGuessService;
         private readonly IAttemptsService _attemptsService;
         private readonly IComparisonService _comparisonService;
         private readonly IHubContext<PlayerHub> _playerHubContext;
+        private readonly IAuthService _authService;
 
         public HiloController(
             IHiLoGuessService hiLoGuessService,
             IAttemptsService attemptsService,
             IComparisonService comparisonService,
-            IHubContext<PlayerHub> playerHubContext)
+            IHubContext<PlayerHub> playerHubContext,
+            IAuthService authService)
         {
             _hiLoGuessService = hiLoGuessService;
             _attemptsService = attemptsService;
             _comparisonService = comparisonService;
             _playerHubContext = playerHubContext;
+            _authService = authService;
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public ActionResult<string> Login([FromBody] UserDto userLogin)
+        {
+            var token = _authService.Login(userLogin);
+            return Ok(token);
+        }
+
+        [HttpPost("registration")]
+        [AllowAnonymous]
+        public ActionResult<string> Registration(
+            [FromBody] UserRegistrationModel userLogin,
+            [FromHeader] string role)
+        {
+            var token = _authService.Registeration(userLogin, role);
+            return Ok(token);
         }
 
         [HttpGet("start")]

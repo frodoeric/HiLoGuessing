@@ -1,9 +1,10 @@
 ﻿using HiloGuessing.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HiLoGuessing.Infrastructure.Context
 {
-    public class HiLoGuessDbContext : DbContext
+    public class HiLoGuessDbContext : IdentityDbContext<User>
     {
         public DbSet<HiLoGuess> HiLoGuess { get; set; }
         public DbSet<Attempts> Attempts { get; set; }

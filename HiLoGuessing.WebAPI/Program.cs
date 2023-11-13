@@ -1,6 +1,13 @@
+using System.Text;
+using HiloGuessing.Domain.Entities;
+using HiLoGuessing.Infrastructure.Context;
 using HiLoGuessing.IoC;
+using HiLoGuessing.WebAPI.Auth;
 using HiLoGuessing.WebAPI.Middleware;
 using HiLoGuessing.WebAPI.SignalR.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 
@@ -8,11 +15,43 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json", optional: true);
 
+builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddIoC(builder.Configuration);
-
 builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
+
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("Jwt"));
+
+// For Identity  
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<HiLoGuessDbContext>()
+    .AddDefaultTokenProviders();
+// Adding Authentication  
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+
+// Adding Jwt Bearer  
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JWTKey:ValidAudience"],
+            ValidIssuer = builder.Configuration["JWTKey:ValidIssuer"],
+            ClockSkew = TimeSpan.Zero,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTKey:Secret"]))
+        };
+    });
+
+builder.Services.AddControllers();
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
@@ -64,6 +103,8 @@ app.UseCors("AllowAnyOrigin");
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
