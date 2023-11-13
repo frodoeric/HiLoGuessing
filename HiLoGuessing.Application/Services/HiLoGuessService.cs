@@ -41,6 +41,8 @@ namespace HiLoGuessing.Application.Services
             return next;
         }
 
+
+
         public async Task<int> GetMysteryNumberAsync(Guid id)
         {
             var mysteryNumber = await _hiloRepository.GetByIdAsync(id);

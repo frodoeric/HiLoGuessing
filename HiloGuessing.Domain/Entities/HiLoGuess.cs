@@ -3,11 +3,23 @@ using System.Text.Json.Serialization;
 
 namespace HiloGuessing.Domain.Entities
 {
+    public class Game
+    {
+        [Key]
+        public Guid GameId { get; set; }
+        public Guid CurrentPlayerID { get; set; }
+
+        public List<HiLoGuess> HiLoGuess { get; set; }
+    }
+
     public class HiLoGuess
     {
         [Key]
         public Guid HiLoGuessId { get; set; }
         public int GeneratedMysteryNumber { get; set; } = 0;
+
+        [JsonIgnore]
+        public Guid GameId { get; set; }
 
         public Attempts Attempts { get; set; }
         public Player Player { get; set; }
