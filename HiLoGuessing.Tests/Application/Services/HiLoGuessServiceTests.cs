@@ -3,6 +3,7 @@ using HiLoGuessing.Application.Services.Interfaces;
 using HiloGuessing.Domain.Entities;
 using HiloGuessing.Domain.Interfaces;
 using Moq;
+using Serilog;
 
 namespace HiLoGuessing.Tests.Application.Services
 {
@@ -11,12 +12,14 @@ namespace HiLoGuessing.Tests.Application.Services
     {
         private IHiLoGuessService _hiLoGuessService;
         private Mock<IRepository<HiLoGuess>> _mockHiLoRepository;
+        private Mock<ILogger> _loggerMock;
 
         [SetUp]
         public void Setup()
         {
+            _loggerMock = new Mock<ILogger>();
             _mockHiLoRepository = new Mock<IRepository<HiLoGuess>>();
-            _hiLoGuessService = new HiLoGuessService(_mockHiLoRepository.Object);
+            _hiLoGuessService = new HiLoGuessService(_mockHiLoRepository.Object, _loggerMock.Object);
         }
 
         [Test]

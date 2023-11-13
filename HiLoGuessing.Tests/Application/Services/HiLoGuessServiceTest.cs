@@ -2,6 +2,7 @@
 using HiLoGuessing.Application.Services;
 using HiLoGuessing.Application.Services.Interfaces;
 using Moq;
+using Serilog;
 
 namespace HiLoGuessing.Tests.Application.Services
 {
@@ -12,12 +13,14 @@ namespace HiLoGuessing.Tests.Application.Services
         {
             private IComparisonService _comparisonService;
             private Mock<IHiLoGuessService> _mockHiLoGuessService;
+            private Mock<ILogger> _loggerMock;
 
             [SetUp]
             public void Setup()
             {
+                _loggerMock = new Mock<ILogger>();
                 _mockHiLoGuessService = new Mock<IHiLoGuessService>();
-                _comparisonService = new ComparisonService(_mockHiLoGuessService.Object);
+                _comparisonService = new ComparisonService(_mockHiLoGuessService.Object, _loggerMock.Object);
                 _mockHiLoGuessService.Setup(mock => mock.GetHiLoGuessAsync(It.IsAny<Guid>()))
                     .ReturnsAsync(new HiLoGuess());
             }
