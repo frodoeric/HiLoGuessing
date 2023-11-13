@@ -2,6 +2,9 @@
 
 This is a solution for a Web API developed in .NET 7, designed for a High-Low Guessing Game. The application utilizes Entity Framework Core for database management and includes the configuration and application of migrations to maintain and evolve the database schema.
 
+Aplication on Azure:
+https://hiloguessingwebapi20231111161433.azurewebsites.net/index.html
+
 ## Requirements
 
 Make sure to have the following installed on your machine:
